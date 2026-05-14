@@ -22,7 +22,6 @@ export default function NuevoGrupoPage() {
     { id: 'Bundesliga', nombre: 'Bundesliga', pais: 'Alemania' },
     { id: 'SerieA', nombre: 'Serie A', pais: 'Italia' },
     { id: 'Ligue1', nombre: 'Ligue 1', pais: 'Francia' },
-    { id: 'Champions', nombre: 'Champions', pais: 'Europa' }
   ]
 
   const handleSubmit = async (e) => {
