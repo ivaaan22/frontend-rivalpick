@@ -1,40 +1,70 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ProtectedRoute from '../components/ProtectedRoute'
 import ThemeToggle from '../components/ThemeToggle'
 import { apiRequest } from '../services/api'
 
 export default function PartidosPage() {
   const [liga, setLiga] = useState('LaLiga')
-  const [jornada, setJornada] = useState(30)
+  const [jornada, setJornada] = useState(null)
+  const [totalJornadas, setTotalJornadas] = useState(38)
   const [partidos, setPartidos] = useState([])
   const [cargando, setCargando] = useState(false)
   const [mensaje, setMensaje] = useState('')
 
   const ligas = [
-    { id: 'LaLiga', nombre: 'LaLiga' },
-    { id: 'Premier', nombre: 'Premier' },
-    { id: 'Bundesliga', nombre: 'Bundesliga' },
-    { id: 'SerieA', nombre: 'Serie A' },
-    { id: 'Ligue1', nombre: 'Ligue 1' },
+    { id: 'LaLiga', nombre: 'LaLiga', pais: 'España', bandera: '🇪🇸' },
+    { id: 'Premier', nombre: 'Premier League', pais: 'Inglaterra', bandera: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+    { id: 'Bundesliga', nombre: 'Bundesliga', pais: 'Alemania', bandera: '🇩🇪' },
+    { id: 'SerieA', nombre: 'Serie A', pais: 'Italia', bandera: '🇮🇹' },
+    { id: 'Ligue1', nombre: 'Ligue 1', pais: 'Francia', bandera: '🇫🇷' },
   ]
 
-  const buscarPartidos = async () => {
-    setCargando(true)
-    setMensaje('')
-    setPartidos([])
-    try {
-      const data = await apiRequest(`/partidos?liga=${liga}&jornada=${jornada}`)
-      setPartidos(data)
-      if (data.length === 0) {
-        setMensaje('No hay partidos para esta jornada')
+  useEffect(() => {
+    const cargarJornadaActual = async () => {
+      setCargando(true)
+      setMensaje('')
+      try {
+        const info = await apiRequest(`/partidos/jornada-actual?liga=${liga}`)
+        setJornada(info.jornadaActual)
+        setTotalJornadas(info.totalJornadas)
+      } catch (error) {
+        setMensaje('Error al cargar la jornada actual')
+        setCargando(false)
       }
-    } catch (error) {
-      setMensaje(error.message)
-    } finally {
-      setCargando(false)
     }
+    cargarJornadaActual()
+  }, [liga])
+
+  useEffect(() => {
+    if (jornada === null) return
+    const buscarPartidos = async () => {
+      setCargando(true)
+      setMensaje('')
+      setPartidos([])
+      try {
+        const data = await apiRequest(`/partidos?liga=${liga}&jornada=${jornada}`)
+        setPartidos(data)
+        if (data.length === 0) {
+          setMensaje('No hay partidos para esta jornada')
+        }
+      } catch (error) {
+        setMensaje(error.message)
+      } finally {
+        setCargando(false)
+      }
+    }
+    buscarPartidos()
+  }, [liga, jornada])
+
+  const cambiarJornada = (delta) => {
+    setJornada((prev) => {
+      const nueva = prev + delta
+      if (nueva < 1) return 1
+      if (nueva > totalJornadas) return totalJornadas
+      return nueva
+    })
   }
 
   const formatearHora = (fecha) => {
@@ -92,44 +122,56 @@ export default function PartidosPage() {
             Consulta los partidos reales de cada jornada
           </p>
 
-          <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4 mb-4 flex flex-wrap items-end gap-3">
-            <div>
-              <label className="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">Liga</label>
-              <select
-                value={liga}
-                onChange={(e) => setLiga(e.target.value)}
-                className="px-3 py-2 rounded-md bg-zinc-50 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500"
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4">
+            {ligas.map((l) => (
+              <button
+                key={l.id}
+                onClick={() => setLiga(l.id)}
+                className={`p-3 rounded-xl border text-center transition ${
+                  liga === l.id
+                    ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
+                    : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700'
+                }`}
               >
-                {ligas.map(l => (
-                  <option key={l.id} value={l.id}>{l.nombre}</option>
-                ))}
-              </select>
-            </div>
+                <div className="text-2xl mb-1">{l.bandera}</div>
+                <p className={`text-xs font-medium ${liga === l.id ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
+                  {l.nombre}
+                </p>
+              </button>
+            ))}
+          </div>
 
-            <div>
-              <label className="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">Jornada</label>
-              <input
-                type="number"
-                value={jornada}
-                onChange={(e) => setJornada(e.target.value)}
-                min={1}
-                max={38}
-                className="w-24 px-3 py-2 rounded-md bg-zinc-50 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-
+          <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4 mb-4 flex items-center justify-center gap-6">
             <button
-              onClick={buscarPartidos}
-              className="px-5 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm transition"
+              onClick={() => cambiarJornada(-1)}
+              disabled={jornada === 1 || jornada === null}
+              className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 disabled:opacity-30 disabled:cursor-not-allowed transition flex items-center justify-center text-lg"
             >
-              Buscar partidos
+              ‹
+            </button>
+            <div className="text-center min-w-[120px]">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">Jornada</p>
+              <p className="text-2xl font-medium text-zinc-900 dark:text-zinc-100">
+                {jornada !== null ? jornada : '—'}
+              </p>
+            </div>
+            <button
+              onClick={() => cambiarJornada(1)}
+              disabled={jornada === totalJornadas || jornada === null}
+              className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 disabled:opacity-30 disabled:cursor-not-allowed transition flex items-center justify-center text-lg"
+            >
+              ›
             </button>
           </div>
 
           {cargando ? (
-            <p className="text-zinc-500 dark:text-zinc-400">Cargando partidos...</p>
+            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-8 text-center">
+              <p className="text-zinc-500 dark:text-zinc-400">Cargando partidos...</p>
+            </div>
           ) : mensaje ? (
-            <p className="text-zinc-500 dark:text-zinc-400">{mensaje}</p>
+            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-8 text-center">
+              <p className="text-zinc-500 dark:text-zinc-400">{mensaje}</p>
+            </div>
           ) : partidos.length > 0 ? (
             <div className="space-y-5">
               {Object.keys(partidosAgrupados).map((dia) => (
@@ -168,9 +210,7 @@ export default function PartidosPage() {
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-zinc-500 dark:text-zinc-400">Pulsa "Buscar partidos" para ver los resultados</p>
-          )}
+          ) : null}
         </div>
       </div>
     </ProtectedRoute>
