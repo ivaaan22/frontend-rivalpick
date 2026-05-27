@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import ProtectedRoute from '../components/ProtectedRoute'
-import ThemeToggle from '../components/ThemeToggle'
 import { apiRequest } from '../services/api'
 
 export default function PartidosPage() {
+  const router = useRouter()
   const [liga, setLiga] = useState('LaLiga')
   const [jornada, setJornada] = useState(null)
   const [totalJornadas, setTotalJornadas] = useState(38)
@@ -14,13 +15,12 @@ export default function PartidosPage() {
   const [mensaje, setMensaje] = useState('')
 
   const ligas = [
-    { id: 'LaLiga', nombre: 'LaLiga', pais: 'España', bandera: '🇪🇸' },
-    { id: 'Premier', nombre: 'Premier League', pais: 'Inglaterra', bandera: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-    { id: 'Bundesliga', nombre: 'Bundesliga', pais: 'Alemania', bandera: '🇩🇪' },
-    { id: 'SerieA', nombre: 'Serie A', pais: 'Italia', bandera: '🇮🇹' },
-    { id: 'Ligue1', nombre: 'Ligue 1', pais: 'Francia', bandera: '🇫🇷' },
+    { id: 'LaLiga', nombre: 'LaLiga', pais: 'España', bandera: 'https://static.vecteezy.com/system/resources/previews/010/994/309/non_2x/la-liga-logo-symbol-white-and-black-design-spain-football-european-countries-football-teams-illustration-free-vector.jpg' },
+    { id: 'Premier', nombre: 'Premier League', pais: 'Inglaterra', bandera: 'https://static.vecteezy.com/system/resources/previews/015/863/623/non_2x/england-premier-league-logo-on-transparent-background-free-vector.jpg' },
+    { id: 'Bundesliga', nombre: 'Bundesliga', pais: 'Alemania', bandera: 'https://static.vecteezy.com/system/resources/previews/010/994/312/non_2x/bundesliga-logo-symbol-white-design-germany-football-european-countries-football-teams-illustration-with-black-background-free-vector.jpg' },
+    { id: 'SerieA', nombre: 'Serie A', pais: 'Italia', bandera: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Serie_A.png' },
+    { id: 'Ligue1', nombre: 'Ligue 1', pais: 'Francia', bandera: 'https://upload.wikimedia.org/wikipedia/commons/4/49/Ligue1_Uber_Eats_logo.png' },
   ]
-
   useEffect(() => {
     const cargarJornadaActual = async () => {
       setCargando(true)
@@ -111,12 +111,14 @@ export default function PartidosPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-100 dark:bg-zinc-900 px-4 py-8 relative">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
-
-        <div className="max-w-3xl mx-auto">
+      <div className="min-h-screen bg-zinc-950 px-4 py-8 relative">
+          <div className="max-w-3xl mx-auto">
+          <button
+            onClick={() => router.push('/')}
+            className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 mb-4"
+          >
+            ← Menú principal
+          </button>
           <h1 className="text-2xl font-medium mb-1 text-zinc-900 dark:text-zinc-100">Partidos</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
             Consulta los partidos reales de cada jornada
@@ -124,20 +126,34 @@ export default function PartidosPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4">
             {ligas.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => setLiga(l.id)}
-                className={`p-3 rounded-xl border text-center transition ${
-                  liga === l.id
-                    ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
-                    : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700'
-                }`}
-              >
-                <div className="text-2xl mb-1">{l.bandera}</div>
-                <p className={`text-xs font-medium ${liga === l.id ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                  {l.nombre}
-                </p>
-              </button>
+            <button
+              key={l.id}
+              onClick={() => setLiga(l.id)}
+              className={`p-3 rounded-xl border text-center transition ${
+                liga === l.id
+                ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
+                : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700'
+              }`}
+            >
+          <div className="flex items-center justify-center mb-1">
+          <div className="w-10 h-10 bg-white dark:bg-zinc-900 rounded-md flex items-center justify-center overflow-hidden">
+          <img
+            src={l.bandera}
+            alt={l.pais}
+            className="w-full h-full object-contain"
+            />
+            </div>
+            </div>
+            <p
+              className={`text-xs font-medium ${
+               liga === l.id
+                ? 'text-indigo-700 dark:text-indigo-300'
+                : 'text-zinc-900 dark:text-zinc-100'
+              }`}
+            >
+              {l.nombre}
+            </p>
+            </button>
             ))}
           </div>
 

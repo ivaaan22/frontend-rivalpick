@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ProtectedRoute from '../components/ProtectedRoute'
-import ThemeToggle from '../components/ThemeToggle'
 import { apiRequest } from '../services/api'
 
 export default function GruposPage() {
@@ -36,12 +35,15 @@ export default function GruposPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-100 dark:bg-zinc-900 px-4 py-8 relative">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
+      <div className="min-h-screen bg-zinc-950 px-4 py-8 relative">
+          <div className="max-w-3xl mx-auto">
+          <button
+            onClick={() => router.push('/')}
+            className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 mb-4"
+          >
+            ← Menú principal
+          </button>
 
-        <div className="max-w-3xl mx-auto">
           <div className="flex items-end justify-between mb-6">
             <div>
               <h1 className="text-2xl font-medium text-zinc-900 dark:text-zinc-100">Mis grupos</h1>

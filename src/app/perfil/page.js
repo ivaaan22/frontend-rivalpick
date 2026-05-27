@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ProtectedRoute from '../components/ProtectedRoute'
-import ThemeToggle from '../components/ThemeToggle'
 import { apiRequest } from '../services/api'
 
 export default function PerfilPage() {
@@ -56,9 +55,8 @@ export default function PerfilPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-100 dark:bg-zinc-900 px-4 py-8 relative">
-        <div className="absolute top-4 right-4 flex gap-2">
-          <ThemeToggle />
+      <div className="min-h-screen bg-zinc-950 px-4 py-8 relative">
+        <div className="absolute top-4 right-4">
           <button
             onClick={handleLogout}
             className="px-3 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition"
@@ -68,6 +66,12 @@ export default function PerfilPage() {
         </div>
 
         <div className="max-w-2xl mx-auto">
+          <button
+            onClick={() => router.push('/')}
+            className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 mb-4"
+          >
+            ← Menú principal
+          </button>
           <h1 className="text-2xl font-medium mb-6 text-zinc-900 dark:text-zinc-100">
             Perfil
           </h1>

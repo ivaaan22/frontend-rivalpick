@@ -20,8 +20,8 @@ export default function ProtectedRoute({ children }) {
 
   if (verificando) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-100 dark:bg-zinc-900">
-        <p className="text-zinc-500 dark:text-zinc-400">Cargando...</p>
+      <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+        <p className="text-zinc-400">Cargando...</p>
       </div>
     )
   }

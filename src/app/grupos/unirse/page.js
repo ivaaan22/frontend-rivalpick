@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ProtectedRoute from '../../components/ProtectedRoute'
-import ThemeToggle from '../../components/ThemeToggle'
 import { apiRequest } from '../../services/api'
 
 export default function UnirseGrupoPage() {
@@ -33,20 +32,24 @@ export default function UnirseGrupoPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-100 dark:bg-zinc-900 px-4 py-8 relative">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
+      <div className="min-h-screen bg-zinc-950 px-4 py-8 relative">
+          <div className="max-w-md mx-auto">
+          <div className="space-y-2 mb-4">
+            <button
+              onClick={() => router.push('/')}
+              className="block w-fit text-sm text-zinc-300 hover:text-white transition"
+            >
+              ← Menú principal
+            </button>
+            <button
+              onClick={() => router.push('/grupos')}
+              className="block w-fit text-sm text-zinc-300 hover:text-white transition"
+            >
+              ← Mis grupos
+            </button>
+          </div>
 
-        <div className="max-w-md mx-auto">
-          <button
-            onClick={() => router.push('/grupos')}
-            className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 mb-2"
-          >
-            ← Mis grupos
-          </button>
-
-          <h1 className="text-2xl font-medium mb-1 text-zinc-900 dark:text-zinc-100">Unirse a un grupo</h1>
+          <h1 className="text-2xl font-medium mb-1 text-zinc-100">Unirse a un grupo</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
             Introduce el código de invitación que te ha pasado un amigo
           </p>

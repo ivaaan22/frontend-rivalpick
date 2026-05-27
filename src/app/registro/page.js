@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import ThemeToggle from '../components/ThemeToggle'
 
 export default function RegistroPage() {
   const [nombre, setNombre] = useState('')
@@ -38,12 +37,8 @@ export default function RegistroPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-100 dark:bg-zinc-900 px-4 relative">
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
-
-      <div className="bg-white dark:bg-zinc-800 p-8 rounded-xl shadow-md w-full max-w-md border border-zinc-200 dark:border-zinc-700">
+    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4 relative">
+      <div className="bg-zinc-900 p-8 rounded-xl shadow-md w-full max-w-md border border-zinc-800">
         <div className="flex items-center justify-center gap-2 mb-6">
           <div className="w-3 h-3 rounded-full bg-indigo-600 border-2 border-indigo-300"></div>
           <h1 className="text-xl font-medium text-zinc-900 dark:text-zinc-100">RivalPick</h1>
