@@ -1,11 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function Navbar({ titulo, volver }) {
   const router = useRouter()
   const [menuAbierto, setMenuAbierto] = useState(false)
+  const [esSuperadmin, setEsSuperadmin] = useState(false)
+
+  useEffect(() => {
+    const u = localStorage.getItem('usuario')
+    if (u) {
+      const usuario = JSON.parse(u)
+      setEsSuperadmin(usuario.rol === 'superadmin')
+    }
+  }, [])
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -36,11 +45,14 @@ export default function Navbar({ titulo, volver }) {
           <>
             <div className="hidden sm:flex items-center gap-2">
               <button onClick={() => router.push('/grupos')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Grupos</button>
-                <button onClick={() => router.push('/partidos')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Partidos</button>
-                <button onClick={() => router.push('/predicciones')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Predicciones</button>
-                <button onClick={() => router.push('/resultados')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Resultados</button>
-                <button onClick={() => router.push('/historial')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Historial</button>
-                <button onClick={() => router.push('/perfil')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Perfil</button>
+              <button onClick={() => router.push('/partidos')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Partidos</button>
+              <button onClick={() => router.push('/predicciones')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Predicciones</button>
+              <button onClick={() => router.push('/resultados')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Resultados</button>
+              <button onClick={() => router.push('/historial')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Historial</button>
+              <button onClick={() => router.push('/perfil')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Perfil</button>
+              {esSuperadmin && (
+                <button onClick={() => router.push('/admin')} className="text-xs px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition">Admin</button>
+              )}
               <button onClick={handleLogout} className="text-sm px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">Salir</button>
             </div>
 
@@ -63,6 +75,9 @@ export default function Navbar({ titulo, volver }) {
           <button onClick={() => { router.push('/resultados'); setMenuAbierto(false) }} className="text-zinc-400 hover:text-white text-sm transition px-3 py-2 rounded-lg hover:bg-zinc-800 text-left">Resultados</button>
           <button onClick={() => { router.push('/historial'); setMenuAbierto(false) }} className="text-zinc-400 hover:text-white text-sm transition px-3 py-2 rounded-lg hover:bg-zinc-800 text-left">Historial</button>
           <button onClick={() => { router.push('/perfil'); setMenuAbierto(false) }} className="text-zinc-400 hover:text-white text-sm transition px-3 py-2 rounded-lg hover:bg-zinc-800 text-left">Perfil</button>
+          {esSuperadmin && (
+            <button onClick={() => { router.push('/admin'); setMenuAbierto(false) }} className="text-emerald-400 text-sm transition px-3 py-2 rounded-lg hover:bg-zinc-800 text-left">Panel Admin</button>
+          )}
           <button onClick={handleLogout} className="text-red-400 hover:text-red-300 text-sm transition px-3 py-2 rounded-lg hover:bg-zinc-800 text-left">Cerrar sesión</button>
         </div>
       )}

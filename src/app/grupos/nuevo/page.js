@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ProtectedRoute from '../../components/ProtectedRoute'
+import Navbar from '../../components/Navbar'
 import { apiRequest } from '../../services/api'
 
 export default function NuevoGrupoPage() {
@@ -14,6 +15,7 @@ export default function NuevoGrupoPage() {
   const [apuesta, setApuesta] = useState('')
   const [visibilidad, setVisibilidad] = useState('privado')
   const [mensaje, setMensaje] = useState('')
+  const [cargando, setCargando] = useState(false)
 
   const ligas = [
     { id: 'LaLiga', nombre: 'LaLiga', pais: 'España' },
@@ -26,15 +28,17 @@ export default function NuevoGrupoPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setMensaje('')
-
+    setCargando(true)
     try {
-      const data = await apiRequest('/grupos', {
+      await apiRequest('/grupos', {
         method: 'POST',
         body: JSON.stringify({ nombre, descripcion, liga, modo, apuesta, visibilidad })
       })
       router.push('/grupos')
     } catch (error) {
       setMensaje(error.message)
+    } finally {
+      setCargando(false)
     }
   }
 
@@ -42,204 +46,85 @@ export default function NuevoGrupoPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-950 px-4 py-8 relative">
-          <div className="max-w-2xl mx-auto">
-          <div className="space-y-2 mb-4">
-            <button
-              onClick={() => router.push('/')}
-              className="block w-fit text-sm text-zinc-300 hover:text-white transition"
-            >
-              ← Menú principal
-            </button>
-            <button
-              onClick={() => router.push('/grupos')}
-              className="block w-fit text-sm text-zinc-300 hover:text-white transition"
-            >
-              ← Mis grupos
-            </button>
-          </div>
-
-          <h1 className="text-2xl font-medium mb-1 text-zinc-100">Crear nuevo grupo</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-            Configura tu grupo y comparte el código con tus amigos
-          </p>
-
+      <div className="min-h-screen bg-zinc-950">
+        <Navbar titulo="Nuevo grupo" volver />
+        <div className="max-w-2xl mx-auto px-4 py-8">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-5">
-              <h3 className="text-sm font-medium mb-3 text-zinc-900 dark:text-zinc-100">Información básica</h3>
-
-              <div className="mb-3">
-                <label className="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">
-                  Nombre del grupo
-                </label>
-                <input
-                  type="text"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  placeholder="Ej: Peña del Barrio, Los Cracks..."
-                  className="w-full px-4 py-2 rounded-md bg-zinc-50 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500"
-                  required
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">
-                  Descripción (opcional)
-                </label>
-                <textarea
-                  value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
-                  placeholder="Una descripción breve del grupo..."
-                  rows={2}
-                  className="w-full px-4 py-2 rounded-md bg-zinc-50 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500 resize-none"
-                />
-              </div>
-
-              <div className="bg-zinc-100 dark:bg-zinc-700 rounded-md p-3 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-md bg-indigo-600 flex items-center justify-center text-white text-sm font-medium">
-                  {iniciales}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+              <h3 className="text-white font-semibold mb-4">Información básica</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-widest">Nombre del grupo</label>
+                  <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Peña del Barrio..." className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition" required />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{nombre || 'Nombre del grupo'}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Tú · Admin · 1 miembro</p>
+                  <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-widest">Descripción (opcional)</label>
+                  <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} placeholder="Una descripción breve..." rows={2} className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition resize-none" />
                 </div>
+                {nombre && (
+                  <div className="bg-zinc-800 rounded-xl p-3 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-sm font-bold">{iniciales}</div>
+                    <div>
+                      <p className="text-white font-medium text-sm">{nombre}</p>
+                      <p className="text-zinc-500 text-xs">Tú · Admin · 1 miembro</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-5">
-              <h3 className="text-sm font-medium mb-3 text-zinc-900 dark:text-zinc-100">Liga a seguir</h3>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+              <h3 className="text-white font-semibold mb-4">Liga a seguir</h3>
               <div className="grid grid-cols-3 gap-2">
                 {ligas.map((l) => (
-                  <button
-                    type="button"
-                    key={l.id}
-                    onClick={() => setLiga(l.id)}
-                    className={`p-3 rounded-md border text-left transition ${
-                      liga === l.id
-                        ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
-                        : 'bg-zinc-50 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-600'
-                    }`}
-                  >
-                    <p className={`text-sm font-medium ${liga === l.id ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                      {l.nombre}
-                    </p>
-                    <p className={`text-xs ${liga === l.id ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                      {l.pais}
-                    </p>
+                  <button type="button" key={l.id} onClick={() => setLiga(l.id)} className={`p-3 rounded-xl border text-left transition ${liga === l.id ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}>
+                    <p className="text-sm font-medium">{l.nombre}</p>
+                    <p className="text-xs opacity-60 mt-0.5">{l.pais}</p>
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-5">
-              <h3 className="text-sm font-medium mb-3 text-zinc-900 dark:text-zinc-100">Modo de juego</h3>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+              <h3 className="text-white font-semibold mb-4">Modo de juego</h3>
               <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setModo('1X2')}
-                  className={`p-3 rounded-md border text-left transition ${
-                    modo === '1X2'
-                      ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
-                      : 'bg-zinc-50 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-600'
-                  }`}
-                >
-                  <p className={`text-sm font-medium ${modo === '1X2' ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    Clásico (1X2)
-                  </p>
-                  <p className={`text-xs mt-1 ${modo === '1X2' ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                    Predices ganador o empate
-                  </p>
+                <button type="button" onClick={() => setModo('1X2')} className={`p-3 rounded-xl border text-left transition ${modo === '1X2' ? 'bg-emerald-500/20 border-emerald-500' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
+                  <p className={`text-sm font-medium ${modo === '1X2' ? 'text-emerald-300' : 'text-white'}`}>Clásico (1X2)</p>
+                  <p className="text-xs text-zinc-500 mt-1">Predices ganador o empate</p>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setModo('exacto')}
-                  className={`p-3 rounded-md border text-left transition ${
-                    modo === 'exacto'
-                      ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
-                      : 'bg-zinc-50 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-600'
-                  }`}
-                >
-                  <p className={`text-sm font-medium ${modo === 'exacto' ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    Marcador exacto
-                  </p>
-                  <p className={`text-xs mt-1 ${modo === 'exacto' ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                    Predices el resultado exacto
-                  </p>
+                <button type="button" onClick={() => setModo('exacto')} className={`p-3 rounded-xl border text-left transition ${modo === 'exacto' ? 'bg-emerald-500/20 border-emerald-500' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
+                  <p className={`text-sm font-medium ${modo === 'exacto' ? 'text-emerald-300' : 'text-white'}`}>Marcador exacto</p>
+                  <p className="text-xs text-zinc-500 mt-1">Predices el resultado exacto</p>
                 </button>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-5">
-              <h3 className="text-sm font-medium mb-3 text-zinc-900 dark:text-zinc-100">Apuesta del grupo</h3>
-              <input
-                type="text"
-                value={apuesta}
-                onChange={(e) => setApuesta(e.target.value)}
-                placeholder='Ej: "El último paga la ronda"'
-                className="w-full px-4 py-2 rounded-md bg-zinc-50 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500"
-              />
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2">
-                Lo que se juega el grupo cada jornada o temporada
-              </p>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+              <h3 className="text-white font-semibold mb-4">Apuesta del grupo</h3>
+              <input type="text" value={apuesta} onChange={(e) => setApuesta(e.target.value)} placeholder='Ej: "El último paga la ronda"' className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition" />
+              <p className="text-xs text-zinc-500 mt-2">Lo que se juega el grupo (opcional)</p>
             </div>
 
-            <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-5">
-              <h3 className="text-sm font-medium mb-3 text-zinc-900 dark:text-zinc-100">Visibilidad</h3>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+              <h3 className="text-white font-semibold mb-4">Visibilidad</h3>
               <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setVisibilidad('privado')}
-                  className={`p-3 rounded-md border text-left transition ${
-                    visibilidad === 'privado'
-                      ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
-                      : 'bg-zinc-50 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-600'
-                  }`}
-                >
-                  <p className={`text-sm font-medium ${visibilidad === 'privado' ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    Privado
-                  </p>
-                  <p className={`text-xs mt-1 ${visibilidad === 'privado' ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                    Solo se une quien tenga el código
-                  </p>
+                <button type="button" onClick={() => setVisibilidad('privado')} className={`p-3 rounded-xl border text-left transition ${visibilidad === 'privado' ? 'bg-emerald-500/20 border-emerald-500' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
+                  <p className={`text-sm font-medium ${visibilidad === 'privado' ? 'text-emerald-300' : 'text-white'}`}>Privado</p>
+                  <p className="text-xs text-zinc-500 mt-1">Solo con código de invitación</p>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setVisibilidad('publico')}
-                  className={`p-3 rounded-md border text-left transition ${
-                    visibilidad === 'publico'
-                      ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500'
-                      : 'bg-zinc-50 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-600'
-                  }`}
-                >
-                  <p className={`text-sm font-medium ${visibilidad === 'publico' ? 'text-indigo-700 dark:text-indigo-300' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                    Público
-                  </p>
-                  <p className={`text-xs mt-1 ${visibilidad === 'publico' ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                    Cualquier usuario puede unirse
-                  </p>
+                <button type="button" onClick={() => setVisibilidad('publico')} className={`p-3 rounded-xl border text-left transition ${visibilidad === 'publico' ? 'bg-emerald-500/20 border-emerald-500' : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'}`}>
+                  <p className={`text-sm font-medium ${visibilidad === 'publico' ? 'text-emerald-300' : 'text-white'}`}>Público</p>
+                  <p className="text-xs text-zinc-500 mt-1">Cualquier usuario puede unirse</p>
                 </button>
               </div>
             </div>
 
-            <div className="flex gap-3 justify-end">
-              <button
-                type="button"
-                onClick={() => router.push('/grupos')}
-                className="px-5 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition"
-              >
-                Crear grupo
-              </button>
-            </div>
+            {mensaje && <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20"><p className="text-red-400 text-sm text-center">{mensaje}</p></div>}
 
-            {mensaje && (
-              <p className="text-center text-sm text-red-500">{mensaje}</p>
-            )}
+            <div className="flex gap-3 justify-end pb-4">
+              <button type="button" onClick={() => router.push('/grupos')} className="px-5 py-2.5 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition text-sm">Cancelar</button>
+              <button type="submit" disabled={cargando} className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold transition text-sm disabled:opacity-50">{cargando ? 'Creando...' : 'Crear grupo'}</button>
+            </div>
           </form>
         </div>
       </div>

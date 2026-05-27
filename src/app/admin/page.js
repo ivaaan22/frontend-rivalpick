@@ -62,7 +62,7 @@ export default function AdminPage() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-zinc-950">
-        <Navbar titulo="Panel de administración" />
+        <Navbar titulo="Panel de administración" volver />
         <div className="max-w-5xl mx-auto px-4 py-8">
           {mensaje && <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20"><p className="text-red-400 text-sm text-center">{mensaje}</p></div>}
           {cargando ? <Loading texto="Cargando panel..." /> : (
@@ -84,7 +84,7 @@ export default function AdminPage() {
                     <div key={u._id} className="flex items-center gap-4 p-4">
                       <div className="w-10 h-10 rounded-xl bg-zinc-700 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">{u.nombre.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()}</div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2"><p className="text-white font-medium truncate">{u.nombre}</p>{u.rol === 'superadmin' && <span className="text-xs px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex-shrink-0">Admin</span>}</div>
+                        <div className="flex items-center gap-2"><p className="text-white font-medium truncate">{u.nombre}</p>{u.rol === 'superadmin' && <span className="text-xs px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex-shrink-0">Superadmin</span>}</div>
                         <p className="text-zinc-500 text-xs">{u.email} · @{u.username} · {formatearFecha(u.createdAt)}</p>
                       </div>
                       {u.rol !== 'superadmin' && <button onClick={() => eliminarUsuario(u._id, u.nombre)} className="text-xs px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition flex-shrink-0">Eliminar</button>}
