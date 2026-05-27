@@ -8,6 +8,7 @@ import { apiRequest } from '../services/api'
 export default function PrediccionesPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
+<<<<<<< HEAD
   const rawGrupoId = searchParams.get('grupoId')
   const rawLiga = searchParams.get('liga')
   const rawJornada = searchParams.get('jornada')
@@ -22,10 +23,21 @@ export default function PrediccionesPage() {
   const [misPredicciones, setMisPredicciones] = useState({})
   const [grupo, setGrupo] = useState(null)
   const [cargando, setCargando] = useState(false)
+=======
+  const grupoId = searchParams.get('grupoId')
+  const liga = searchParams.get('liga')
+  const jornada = searchParams.get('jornada')
+
+  const [partidos, setPartidos] = useState([])
+  const [misPredicciones, setMisPredicciones] = useState({})
+  const [grupo, setGrupo] = useState(null)
+  const [cargando, setCargando] = useState(true)
+>>>>>>> origin/dev
   const [guardando, setGuardando] = useState(null)
   const [mensaje, setMensaje] = useState('')
 
   useEffect(() => {
+<<<<<<< HEAD
     if (grupoId && liga && jornada) return
 
     const prepararValoresPorDefecto = async () => {
@@ -66,6 +78,11 @@ export default function PrediccionesPage() {
     const cargar = async () => {
       setCargando(true)
       setMensaje('')
+=======
+    if (!grupoId || !liga || !jornada) return
+
+    const cargar = async () => {
+>>>>>>> origin/dev
       try {
         const [partidosData, prediccionesData, grupoData] = await Promise.all([
           apiRequest(`/partidos?liga=${liga}&jornada=${jornada}`),
@@ -85,7 +102,10 @@ export default function PrediccionesPage() {
         setCargando(false)
       }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/dev
     cargar()
   }, [grupoId, liga, jornada])
 
@@ -127,7 +147,11 @@ export default function PrediccionesPage() {
               </button>
               <div>
                 <p className="text-white font-semibold text-sm">{grupo?.nombre || 'Predicciones'}</p>
+<<<<<<< HEAD
                 <p className="text-zinc-500 text-xs">Jornada {jornada || '—'} · {liga || '—'}</p>
+=======
+                <p className="text-zinc-500 text-xs">Jornada {jornada} · {liga}</p>
+>>>>>>> origin/dev
               </div>
             </div>
             <div className="text-xs text-zinc-400">
@@ -137,6 +161,7 @@ export default function PrediccionesPage() {
         </nav>
 
         <div className="max-w-2xl mx-auto px-4 py-6">
+<<<<<<< HEAD
           {cargando ? (
             <div className="text-center py-20"><p className="text-zinc-500">Cargando partidos...</p></div>
           ) : (!grupoId || !liga || !jornada) ? (
@@ -160,6 +185,20 @@ export default function PrediccionesPage() {
                 <div className="text-center py-20"><p className="text-zinc-500">No hay partidos para esta jornada</p></div>
               ) : (
                 <div className="space-y-3">
+=======
+          {mensaje && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+              <p className="text-red-400 text-sm text-center">{mensaje}</p>
+            </div>
+          )}
+
+          {cargando ? (
+            <div className="text-center py-20"><p className="text-zinc-500">Cargando partidos...</p></div>
+          ) : partidos.length === 0 ? (
+            <div className="text-center py-20"><p className="text-zinc-500">No hay partidos para esta jornada</p></div>
+          ) : (
+            <div className="space-y-3">
+>>>>>>> origin/dev
               {partidos.map((partido) => {
                 const miPred = misPredicciones[partido.partidoId]
                 const bloqueado = partido.estado !== 'TIMED' && partido.estado !== 'SCHEDULED'
@@ -218,8 +257,11 @@ export default function PrediccionesPage() {
               })}
             </div>
           )}
+<<<<<<< HEAD
         </>
       )}
+=======
+>>>>>>> origin/dev
         </div>
       </div>
     </ProtectedRoute>

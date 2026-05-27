@@ -8,12 +8,18 @@ import { apiRequest } from '../services/api'
 export default function ResultadosPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
+<<<<<<< HEAD
   const rawGrupoId = searchParams.get('grupoId')
   const initialGrupoId = rawGrupoId && rawGrupoId !== 'null' && rawGrupoId !== 'undefined' ? rawGrupoId : null
   const jornadaParam = searchParams.get('jornada')
 
   const [grupoId, setGrupoId] = useState(initialGrupoId)
   const [grupo, setGrupo] = useState(null)
+=======
+  const grupoId = searchParams.get('grupoId')
+  const jornadaParam = searchParams.get('jornada')
+
+>>>>>>> origin/dev
   const [jornada, setJornada] = useState(Number(jornadaParam) || 30)
   const [datos, setDatos] = useState(null)
   const [rankingGeneral, setRankingGeneral] = useState([])
@@ -21,6 +27,7 @@ export default function ResultadosPage() {
   const [mensaje, setMensaje] = useState('')
 
   const cargar = async (j) => {
+<<<<<<< HEAD
     if (!grupoId) return
     setCargando(true)
     setMensaje('')
@@ -33,6 +40,17 @@ export default function ResultadosPage() {
       setDatos(resultados)
       setRankingGeneral(ranking)
       setGrupo(grupoData.grupo)
+=======
+    setCargando(true)
+    setMensaje('')
+    try {
+      const [resultados, ranking] = await Promise.all([
+        apiRequest(`/grupos/${grupoId}/resultados?jornada=${j}`),
+        apiRequest(`/grupos/${grupoId}/ranking`)
+      ])
+      setDatos(resultados)
+      setRankingGeneral(ranking)
+>>>>>>> origin/dev
     } catch (error) {
       setMensaje('Error al cargar los resultados')
     } finally {
@@ -41,6 +59,7 @@ export default function ResultadosPage() {
   }
 
   useEffect(() => {
+<<<<<<< HEAD
     if (grupoId) return
 
     const cargarGrupoDefault = async () => {
@@ -68,11 +87,20 @@ export default function ResultadosPage() {
     if (!grupoId) return
     cargar(jornada)
   }, [grupoId, jornada])
+=======
+    if (!grupoId) return
+    cargar(jornada)
+  }, [grupoId])
+>>>>>>> origin/dev
 
   const cambiarJornada = (delta) => {
     const nueva = jornada + delta
     if (nueva < 1 || nueva > 38) return
     setJornada(nueva)
+<<<<<<< HEAD
+=======
+    cargar(nueva)
+>>>>>>> origin/dev
   }
 
   const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })
@@ -101,6 +129,7 @@ export default function ResultadosPage() {
         <div className="max-w-5xl mx-auto px-4 py-6">
           {cargando ? (
             <div className="text-center py-20"><p className="text-zinc-500">Cargando resultados...</p></div>
+<<<<<<< HEAD
           ) : !grupoId ? (
             <div className="text-center py-20">
               <p className="text-zinc-500 mb-4">No se ha seleccionado un grupo válido para ver los resultados.</p>
@@ -111,6 +140,8 @@ export default function ResultadosPage() {
                 Ir a mis grupos
               </button>
             </div>
+=======
+>>>>>>> origin/dev
           ) : mensaje ? (
             <div className="text-center py-20"><p className="text-red-400">{mensaje}</p></div>
           ) : datos && (
