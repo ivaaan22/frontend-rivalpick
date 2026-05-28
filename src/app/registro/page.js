@@ -16,7 +16,7 @@ export default function RegistroPage() {
     setMensaje('')
     setCargando(true)
     try {
-      const res = await fetch('http://localhost:3001/api/auth/registro', {
+      const res = await fetch('https://backend-rivalpick.onrender.com/api/auth/registro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, email, username, password })

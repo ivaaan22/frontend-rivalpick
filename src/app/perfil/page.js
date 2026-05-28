@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar'
 import Loading from '../components/Loading'
 import { apiRequest } from '../services/api'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3001'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://backend-rivalpick.onrender.com'
 
 export default function PerfilPage() {
   const router = useRouter()
