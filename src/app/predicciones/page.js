@@ -31,7 +31,26 @@ function PrediccionesContent() {
   const [mensaje, setMensaje] = useState('')
 
   useEffect(() => {
+    // Si ya tenemos grupoId y liga, solo necesitamos la jornada
     if (grupoId && liga && jornada) return
+    // Si tenemos grupoId y liga pero no jornada, calcular jornada sin cambiar el grupo
+    if (grupoId && liga && !jornada) {
+      const calcularJornada = async () => {
+        setCargando(true)
+        try {
+          const jornadaInfo = await apiRequest(`/partidos/jornada-actual?liga=${liga}`)
+          setJornada(jornadaInfo.jornadaActual || 1)
+          const grupoData = await apiRequest(`/grupos/${grupoId}`)
+          setGrupo(grupoData.grupo)
+        } catch (error) {
+          setJornada(1)
+        } finally {
+          setCargando(false)
+        }
+      }
+      calcularJornada()
+      return
+    }
 
     const prepararValoresPorDefecto = async () => {
       setCargando(true)
