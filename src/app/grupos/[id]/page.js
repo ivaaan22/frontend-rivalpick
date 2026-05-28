@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import ProtectedRoute from '../../components/ProtectedRoute'
 import Navbar from '../../components/Navbar'
 import Loading from '../../components/Loading'
+import Avatar from '../../components/Avatar'
 import { apiRequest } from '../../services/api'
 
 export default function DetalleGrupoPage() {
@@ -135,7 +136,7 @@ export default function DetalleGrupoPage() {
 
                 <div className="mt-4 flex gap-2">
                   <button onClick={() => router.push(`/predicciones?grupoId=${params.id}&liga=${grupo?.liga}&jornada=`)} className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm transition">⚽ Predecir</button>
-                  <button onClick={() => router.push(`/resultados?grupoId=${params.id}`)} className="flex-1 py-2.5 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 text-sm transition">📊 Resultados</button>
+                  <button onClick={() => router.push(`/resultados?grupoId=${params.id}&jornada=1`)} className="flex-1 py-2.5 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 text-sm transition">📊 Resultados</button>
                 </div>
 
                 {rolUsuario === 'admin' && (
@@ -151,7 +152,7 @@ export default function DetalleGrupoPage() {
                 <div className="divide-y divide-zinc-800">
                   {miembros.map((miembro) => (
                     <div key={miembro._id} className="flex items-center gap-3 py-3">
-                      <div className="w-9 h-9 rounded-xl bg-zinc-700 flex items-center justify-center text-white text-xs font-bold">{iniciales(miembro.nombre)}</div>
+                      <Avatar usuario={miembro} size="sm" className="rounded-xl" />
                       <div className="flex-1">
                         <p className="text-white text-sm font-medium">{miembro.nombre}</p>
                         <p className="text-zinc-500 text-xs">@{miembro.username}</p>

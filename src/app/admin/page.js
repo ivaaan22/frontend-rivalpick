@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 import ProtectedRoute from '../components/ProtectedRoute'
 import Navbar from '../components/Navbar'
 import Loading from '../components/Loading'
+import Avatar from '../components/Avatar'
 import { apiRequest } from '../services/api'
 
 export default function AdminPage() {
-  const router = useRouter()
   const [stats, setStats] = useState(null)
   const [usuarios, setUsuarios] = useState([])
   const [grupos, setGrupos] = useState([])
@@ -82,7 +82,7 @@ export default function AdminPage() {
                 <div className="bg-zinc-900 border border-zinc-800 rounded-2xl divide-y divide-zinc-800">
                   {usuarios.map((u) => (
                     <div key={u._id} className="flex items-center gap-4 p-4">
-                      <div className="w-10 h-10 rounded-xl bg-zinc-700 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">{u.nombre.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()}</div>
+                      <Avatar usuario={u} size="md" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2"><p className="text-white font-medium truncate">{u.nombre}</p>{u.rol === 'superadmin' && <span className="text-xs px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex-shrink-0">Superadmin</span>}</div>
                         <p className="text-zinc-500 text-xs">{u.email} · @{u.username} · {formatearFecha(u.createdAt)}</p>

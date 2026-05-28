@@ -2,17 +2,34 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Avatar from './Avatar'
 
 export default function Navbar({ titulo, volver }) {
   const router = useRouter()
   const [menuAbierto, setMenuAbierto] = useState(false)
   const [esSuperadmin, setEsSuperadmin] = useState(false)
+  const [usuario, setUsuario] = useState(null)
 
   useEffect(() => {
-    const u = localStorage.getItem('usuario')
-    if (u) {
-      const usuario = JSON.parse(u)
-      setEsSuperadmin(usuario.rol === 'superadmin')
+    const cargarUsuario = () => {
+      const u = localStorage.getItem('usuario')
+      if (u) {
+        const parsed = JSON.parse(u)
+        setEsSuperadmin(parsed.rol === 'superadmin')
+        setUsuario(parsed)
+      }
+    }
+
+    cargarUsuario()
+
+    // Escuchar cambios en localStorage (cuando se sube foto desde perfil)
+    window.addEventListener('storage', cargarUsuario)
+    // También escuchar evento custom que dispara la página de perfil
+    window.addEventListener('usuarioActualizado', cargarUsuario)
+
+    return () => {
+      window.removeEventListener('storage', cargarUsuario)
+      window.removeEventListener('usuarioActualizado', cargarUsuario)
     }
   }, [])
 
@@ -49,7 +66,9 @@ export default function Navbar({ titulo, volver }) {
               <button onClick={() => router.push('/predicciones')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Predicciones</button>
               <button onClick={() => router.push('/resultados')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Resultados</button>
               <button onClick={() => router.push('/historial')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Historial</button>
-              <button onClick={() => router.push('/perfil')} className="text-zinc-400 hover:text-white text-sm transition px-3 py-1.5 rounded-lg hover:bg-zinc-800">Perfil</button>
+              <button onClick={() => router.push('/perfil')} className="flex items-center gap-2 hover:opacity-80 transition">
+                <Avatar usuario={usuario} size="xs" />
+              </button>
               {esSuperadmin && (
                 <button onClick={() => router.push('/admin')} className="text-xs px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition">Admin</button>
               )}

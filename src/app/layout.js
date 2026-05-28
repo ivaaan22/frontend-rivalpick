@@ -9,6 +9,9 @@ const geistSans = Geist({
 export const metadata = {
   title: "RivalPick",
   description: "Plataforma de predicciones de fútbol entre amigos",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

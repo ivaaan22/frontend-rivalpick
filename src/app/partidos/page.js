@@ -64,7 +64,8 @@ export default function PartidosPage() {
         setMensaje('')
         setPartidos([])
         try {
-          const data = await apiRequest(`/partidos?liga=Mundial&jornada=1`)
+          // Sin filtro de jornada para traer todos los partidos del Mundial
+          const data = await apiRequest(`/partidos?liga=Mundial`)
           const filtrados = grupoFiltro ? data.filter(p => p.grupo === grupoFiltro) : data
           setPartidos(filtrados)
           if (filtrados.length === 0) setMensaje('No hay partidos para este grupo')
@@ -138,13 +139,9 @@ export default function PartidosPage() {
 
   const fasesLabel = (fase) => {
     const map = {
-      'LEAGUE_STAGE': 'Fase de liga',
-      'PLAYOFFS': 'Playoffs',
-      'LAST_16': 'Octavos de final',
-      'QUARTER_FINALS': 'Cuartos de final',
-      'SEMI_FINALS': 'Semifinales',
-      'FINAL': 'Final',
-      'GROUP_STAGE': 'Fase de grupos',
+      'LEAGUE_STAGE': 'Fase de liga', 'PLAYOFFS': 'Playoffs',
+      'LAST_16': 'Octavos', 'QUARTER_FINALS': 'Cuartos',
+      'SEMI_FINALS': 'Semis', 'FINAL': 'Final', 'GROUP_STAGE': 'Fase de grupos',
     }
     return map[fase] || fase
   }
@@ -154,7 +151,6 @@ export default function PartidosPage() {
       <div className="min-h-screen bg-zinc-950">
         <Navbar titulo="Partidos" volver />
         <div className="max-w-3xl mx-auto px-4 py-6">
-
           <div className="grid grid-cols-3 sm:grid-cols-7 gap-2 mb-4">
             {ligas.map((l) => (
               <button key={l.id} onClick={() => setLiga(l.id)} className={`p-3 rounded-xl border text-center transition ${liga === l.id ? 'bg-emerald-500/20 border-emerald-500' : 'bg-zinc-900 border-zinc-800 hover:border-zinc-600'}`}>
@@ -173,9 +169,7 @@ export default function PartidosPage() {
               <p className="text-xs text-zinc-500 uppercase tracking-wide mb-2 text-center">Grupo</p>
               <div className="grid grid-cols-6 sm:grid-cols-12 gap-1">
                 {GRUPOS_MUNDIAL.map(g => (
-                  <button key={g} onClick={() => setGrupoFiltro(g)} className={`py-2 rounded-lg text-sm font-bold transition ${grupoFiltro === g ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-400 hover:text-white'}`}>
-                    {g}
-                  </button>
+                  <button key={g} onClick={() => setGrupoFiltro(g)} className={`py-2 rounded-lg text-sm font-bold transition ${grupoFiltro === g ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-400 hover:text-white'}`}>{g}</button>
                 ))}
               </div>
             </div>
@@ -183,7 +177,7 @@ export default function PartidosPage() {
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 mb-4 flex items-center justify-center gap-6">
               <button onClick={() => cambiarJornada(-1)} disabled={jornada === 1 || jornada === null} className="w-10 h-10 rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 disabled:opacity-30 transition flex items-center justify-center text-lg">‹</button>
               <div className="text-center min-w-[120px]">
-                <p className="text-xs text-zinc-500 uppercase tracking-wide">{esCopa ? 'Jornada' : 'Jornada'}</p>
+                <p className="text-xs text-zinc-500 uppercase tracking-wide">Jornada</p>
                 <p className="text-2xl font-bold text-white">{jornada !== null ? jornada : '—'}</p>
               </div>
               <button onClick={() => cambiarJornada(1)} disabled={jornada === totalJornadas || jornada === null} className="w-10 h-10 rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 disabled:opacity-30 transition flex items-center justify-center text-lg">›</button>
