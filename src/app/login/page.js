@@ -36,7 +36,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex">
+    <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex">
       <div className="hidden lg:flex lg:w-1/2 bg-emerald-500 flex-col justify-between p-12">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center">
@@ -85,3 +85,4 @@ export default function LoginPage() {
     </div>
   )
 }
+

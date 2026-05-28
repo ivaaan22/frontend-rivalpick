@@ -97,7 +97,7 @@ function ResultadosContent() {
   if (!grupoId) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex items-center justify-center">
           <div className="text-center">
             <p className="text-zinc-500 mb-4">{mensaje || 'Selecciona un grupo para ver resultados'}</p>
             <button onClick={() => router.push('/grupos')} className="px-4 py-2 rounded-lg bg-emerald-500 text-black font-semibold text-sm">Ir a mis grupos</button>
@@ -109,7 +109,7 @@ function ResultadosContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-950">
+      <div className="min-h-[calc(100vh-4rem)] bg-zinc-950">
         <Navbar titulo={grupo?.nombre || 'Resultados'} volver />
 
         <div className="max-w-5xl mx-auto px-4 py-6">
@@ -235,8 +235,9 @@ function ResultadosContent() {
 
 export default function ResultadosPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+    <Suspense fallback={<div className="min-h-[calc(100vh-4rem)] bg-zinc-950" />}>
       <ResultadosContent />
     </Suspense>
   )
 }
+

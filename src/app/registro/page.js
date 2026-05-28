@@ -32,7 +32,7 @@ export default function RegistroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-12">
+    <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="flex items-center gap-2 mb-8">
           <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center">
@@ -82,3 +82,4 @@ export default function RegistroPage() {
     </div>
   )
 }
+

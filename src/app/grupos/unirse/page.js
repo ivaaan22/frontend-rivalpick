@@ -35,7 +35,7 @@ export default function UnirseGrupoPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-950">
+      <div className="min-h-[calc(100vh-4rem)] bg-zinc-950">
         <Navbar titulo="Unirse a grupo" volver />
         <div className="max-w-md mx-auto px-4 py-8">
           <p className="text-zinc-400 text-sm mb-6">Introduce el código de invitación que te ha pasado un amigo</p>
@@ -62,3 +62,4 @@ export default function UnirseGrupoPage() {
     </ProtectedRoute>
   )
 }
+

@@ -22,6 +22,8 @@ function PrediccionesContent() {
   const [grupoId, setGrupoId] = useState(initialGrupoId)
   const [liga, setLiga] = useState(initialLiga)
   const [jornada, setJornada] = useState(initialJornada)
+  const [grupos, setGrupos] = useState([])
+  const [requiereSeleccionGrupo, setRequiereSeleccionGrupo] = useState(false)
   const [partidos, setPartidos] = useState([])
   const [misPredicciones, setMisPredicciones] = useState({})
   const [grupo, setGrupo] = useState(null)
@@ -33,6 +35,9 @@ function PrediccionesContent() {
   useEffect(() => {
     // Si ya tenemos grupoId y liga, solo necesitamos la jornada
     if (grupoId && liga && jornada) return
+    // Si estamos esperando que el usuario elija un grupo, no seguir auto-cargando
+    if (requiereSeleccionGrupo) return
+
     // Si tenemos grupoId y liga pero no jornada, calcular jornada sin cambiar el grupo
     if (grupoId && liga && !jornada) {
       const calcularJornada = async () => {
@@ -62,6 +67,13 @@ function PrediccionesContent() {
           setCargando(false)
           return
         }
+        if (grupos.length > 1 && !grupoId) {
+          setGrupos(grupos)
+          setRequiereSeleccionGrupo(true)
+          setMensaje('Selecciona un grupo para ver tus predicciones.')
+          setCargando(false)
+          return
+        }
         const grupoSeleccionado = grupos[0]
         const ligaSeleccionada = liga || grupoSeleccionado.liga
         let jornadaActual = jornada
@@ -80,7 +92,7 @@ function PrediccionesContent() {
     }
 
     prepararValoresPorDefecto()
-  }, [grupoId, liga, jornada])
+  }, [grupoId, liga, jornada, requiereSeleccionGrupo])
 
   useEffect(() => {
     if (!grupoId || !liga || !jornada) return
@@ -126,6 +138,14 @@ function PrediccionesContent() {
     }
   }
 
+  const handleSeleccionarGrupo = (grupoSeleccionado) => {
+    setGrupoId(grupoSeleccionado._id)
+    setLiga(grupoSeleccionado.liga)
+    setGrupo(grupoSeleccionado)
+    setMensaje('')
+    setRequiereSeleccionGrupo(false)
+  }
+
   const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
   const totalPredichos = Object.keys(misPredicciones).filter(id => misPredicciones[id]?.prediccion).length
@@ -134,7 +154,7 @@ function PrediccionesContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-zinc-950">
+      <div className="min-h-[calc(100vh-4rem)] bg-zinc-950">
         <Navbar titulo={grupo ? `${grupo.nombre} · J${jornada}` : 'Predicciones'} volver />
 
         <div className="max-w-2xl mx-auto px-4 py-6">
@@ -147,7 +167,23 @@ function PrediccionesContent() {
             </div>
           )}
 
-          {cargando ? <Loading texto="Cargando partidos..." /> : (!grupoId || !liga || !jornada) ? (
+          {cargando ? <Loading texto="Cargando partidos..." /> : (requiereSeleccionGrupo && grupos.length > 1) ? (
+            <div className="text-center py-20 space-y-6">
+              <p className="text-zinc-500 mb-4">Selecciona el grupo cuyas predicciones quieres ver.</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {grupos.map((g) => (
+                  <button
+                    key={g._id}
+                    onClick={() => handleSeleccionarGrupo(g)}
+                    className="w-full rounded-2xl border border-zinc-800 bg-zinc-900 px-5 py-4 text-left text-white transition hover:border-emerald-500"
+                  >
+                    <p className="font-semibold">{g.nombre}</p>
+                    <p className="text-zinc-500 text-sm mt-1">{g.liga} · {g.rolUsuario === 'admin' ? 'Admin' : 'Miembro'}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (!grupoId || !liga || !jornada) ? (
             <div className="text-center py-20">
               <p className="text-zinc-500 mb-4">No hay suficientes parámetros. Ve a tus grupos y selecciona uno.</p>
               <button onClick={() => router.push('/grupos')} className="px-4 py-2 rounded-lg bg-emerald-500 text-black font-semibold text-sm">Ir a mis grupos</button>
@@ -242,8 +278,9 @@ function PrediccionesContent() {
 
 export default function PrediccionesPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+    <Suspense fallback={<div className="min-h-[calc(100vh-4rem)] bg-zinc-950" />}>
       <PrediccionesContent />
     </Suspense>
   )
 }
+
