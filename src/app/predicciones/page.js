@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import ProtectedRoute from '../components/ProtectedRoute'
 import Navbar from '../components/Navbar'
 import Loading from '../components/Loading'
 import { apiRequest } from '../services/api'
 
-export default function PrediccionesPage() {
+function PrediccionesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -218,5 +218,13 @@ export default function PrediccionesPage() {
         </div>
       </div>
     </ProtectedRoute>
+  )
+}
+
+export default function PrediccionesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+      <PrediccionesContent />
+    </Suspense>
   )
 }

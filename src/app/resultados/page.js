@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import ProtectedRoute from '../components/ProtectedRoute'
 import Navbar from '../components/Navbar'
@@ -13,7 +13,7 @@ const MAX_JORNADAS = {
   Champions: 8, Mundial: 3
 }
 
-export default function ResultadosPage() {
+function ResultadosContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -230,5 +230,13 @@ export default function ResultadosPage() {
         </div>
       </div>
     </ProtectedRoute>
+  )
+}
+
+export default function ResultadosPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+      <ResultadosContent />
+    </Suspense>
   )
 }
