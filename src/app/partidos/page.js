@@ -143,7 +143,7 @@ export default function PartidosPage() {
       'LAST_16': 'Octavos', 'QUARTER_FINALS': 'Cuartos',
       'SEMI_FINALS': 'Semis', 'FINAL': 'Final', 'GROUP_STAGE': 'Fase de grupos',
     }
-    return map[fase] || fase
+    return map[fase] || null
   }
 
   return (
