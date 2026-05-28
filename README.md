@@ -27,13 +27,14 @@ La app estará disponible en `http://localhost:3000`.
 
 ## Configuración
 
-El archivo `src/app/services/api.js` contiene la URL base del backend:
+Crea un archivo `.env.local` en la raíz con las siguientes variables:
 
-```javascript
-const API_URL = 'http://localhost:3001/api'
+```env
+NEXT_PUBLIC_API_URL=https://backend-rivalpick.onrender.com/api
+NEXT_PUBLIC_API_BASE=https://backend-rivalpick.onrender.com
 ```
 
-Cámbiala a la URL de producción cuando despliegues.
+En desarrollo local no necesitas el archivo, apunta automáticamente a `http://localhost:3001`.
 
 ## Estructura del proyecto
 
