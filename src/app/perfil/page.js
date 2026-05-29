@@ -7,8 +7,6 @@ import Navbar from '../components/Navbar'
 import Loading from '../components/Loading'
 import { apiRequest } from '../services/api'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://backend-rivalpick.onrender.com'
-
 export default function PerfilPage() {
   const router = useRouter()
   const fileInputRef = useRef(null)
@@ -59,51 +57,69 @@ export default function PerfilPage() {
     const file = e.target.files[0]
     if (!file) return
 
-    // Preview inmediato
-    const reader = new FileReader()
-    reader.onload = (ev) => setPreview(ev.target.result)
-    reader.readAsDataURL(file)
-
-    // Subir al servidor
+    // Comprimir y convertir a Base64
     setSubiendoFoto(true)
     try {
-      const token = localStorage.getItem('token')
-      const formData = new FormData()
-      formData.append('foto', file)
+      const base64 = await comprimirImagen(file, 800, 0.8)
+      setPreview(base64)
 
-      const res = await fetch(`${API_BASE}/api/users/me/foto`, {
+      const data = await apiRequest('/users/me/foto', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData
+        body: JSON.stringify({ foto: base64 })
       })
-      const data = await res.json()
-      if (res.ok) {
-        setUsuario(prev => ({ ...prev, fotoPerfil: data.fotoPerfil }))
-        // Actualizar localStorage para que el Navbar se entere
-        const usuarioLocal = JSON.parse(localStorage.getItem('usuario') || '{}')
-        localStorage.setItem('usuario', JSON.stringify({ ...usuarioLocal, fotoPerfil: data.fotoPerfil }))
-        // Notificar al Navbar para que actualice el avatar
-        window.dispatchEvent(new Event('usuarioActualizado'))
-        setMensaje('✓ Foto actualizada')
-        setTimeout(() => setMensaje(''), 3000)
-      } else {
-        setMensaje(data.mensaje || 'Error al subir la foto')
-        setPreview(null)
-      }
+
+      setUsuario(prev => ({ ...prev, fotoPerfil: data.fotoPerfil }))
+
+      // Actualizar localStorage para el Navbar
+      const usuarioLocal = JSON.parse(localStorage.getItem('usuario') || '{}')
+      localStorage.setItem('usuario', JSON.stringify({ ...usuarioLocal, fotoPerfil: data.fotoPerfil }))
+      window.dispatchEvent(new Event('usuarioActualizado'))
+
+      setMensaje('✓ Foto actualizada')
+      setTimeout(() => setMensaje(''), 3000)
     } catch (error) {
-      setMensaje('Error al subir la foto')
+      setMensaje('Error al subir la foto: ' + error.message)
       setPreview(null)
     } finally {
       setSubiendoFoto(false)
     }
   }
 
-  const fotoUrl = preview || (usuario?.fotoPerfil ? `${API_BASE}${usuario.fotoPerfil}` : null)
+  const comprimirImagen = (file, maxWidth, quality) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const img = new Image()
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          let width = img.width
+          let height = img.height
+
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width)
+            width = maxWidth
+          }
+
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, width, height)
+          resolve(canvas.toDataURL('image/jpeg', quality))
+        }
+        img.onerror = reject
+        img.src = e.target.result
+      }
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const fotoUrl = preview || usuario?.fotoPerfil || null
   const iniciales = (n) => n?.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() || '').join('') || ''
 
   return (
     <ProtectedRoute>
-      <div className="min-h-[calc(100vh-4rem)] bg-zinc-950">
+      <div className="min-h-screen bg-zinc-950">
         <Navbar titulo="Perfil" volver />
         <div className="max-w-2xl mx-auto px-4 py-8">
           {cargando ? <Loading /> : (
@@ -190,4 +206,3 @@ export default function PerfilPage() {
     </ProtectedRoute>
   )
 }
-

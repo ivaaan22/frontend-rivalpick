@@ -1,5 +1,3 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://backend-rivalpick.onrender.com'
-
 export default function Avatar({ usuario, size = 'md', className = '' }) {
   const sizes = {
     xs: 'w-7 h-7 text-xs',
@@ -12,7 +10,7 @@ export default function Avatar({ usuario, size = 'md', className = '' }) {
   const iniciales = (nombre) =>
     nombre?.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() || '').join('') || '?'
 
-  const fotoUrl = usuario?.fotoPerfil ? `${API_BASE}${usuario.fotoPerfil}` : null
+  const fotoUrl = usuario?.fotoPerfil || null
 
   return (
     <div className={`${sizes[size]} rounded-xl overflow-hidden flex-shrink-0 ${className}`}>
@@ -22,7 +20,6 @@ export default function Avatar({ usuario, size = 'md', className = '' }) {
           alt={usuario?.nombre}
           className="w-full h-full object-cover"
           onError={(e) => {
-            // Si falla la imagen, mostrar iniciales
             e.target.style.display = 'none'
             e.target.nextSibling.style.display = 'flex'
           }}
