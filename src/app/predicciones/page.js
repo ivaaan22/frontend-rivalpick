@@ -31,6 +31,7 @@ function PrediccionesContent() {
   const [guardando, setGuardando] = useState(null)
   const [guardado, setGuardado] = useState(null)
   const [mensaje, setMensaje] = useState('')
+  const [marcadores, setMarcadores] = useState({}) // { partidoId: { local: '', visitante: '' } }
 
   useEffect(() => {
     // Si ya tenemos grupoId y liga, solo necesitamos la jornada
@@ -109,8 +110,17 @@ function PrediccionesContent() {
         setPartidos(partidosData)
         setGrupo(grupoData.grupo)
         const predsMap = {}
-        prediccionesData.forEach(p => { predsMap[p.partidoId] = p })
+        const marcadoresMap = {}
+        prediccionesData.forEach(p => {
+          predsMap[p.partidoId] = p
+          // Si tiene marcador exacto guardado, parsearlo (formato "2-1")
+          if (p.prediccion && p.prediccion.includes('-')) {
+            const [local, visitante] = p.prediccion.split('-')
+            marcadoresMap[p.partidoId] = { local, visitante }
+          }
+        })
         setMisPredicciones(predsMap)
+        setMarcadores(marcadoresMap)
       } catch (error) {
         setMensaje('Error al cargar los datos')
       } finally {
@@ -144,6 +154,12 @@ function PrediccionesContent() {
     setGrupo(grupoSeleccionado)
     setMensaje('')
     setRequiereSeleccionGrupo(false)
+  }
+
+  const predecirExacto = async (partidoId, local, visitante) => {
+    if (local === '' || visitante === '') return
+    const prediccion = `${local}-${visitante}`
+    await predecir(partidoId, prediccion)
   }
 
   const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -223,6 +239,44 @@ function PrediccionesContent() {
                           <div className="text-center">
                             <span className="text-xs px-3 py-1 rounded-full bg-zinc-800 text-zinc-500">Partido cerrado</span>
                             {miPred?.prediccion && <span className="ml-2 text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Tu pick: {miPred.prediccion}</span>}
+                          </div>
+                        ) : grupo?.modo === 'exacto' ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                              <div className="flex-1 text-center">
+                                <p className="text-xs text-zinc-500 mb-1">{partido.equipoLocal}</p>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="20"
+                                  value={marcadores[partido.partidoId]?.local ?? ''}
+                                  onChange={(e) => setMarcadores(prev => ({ ...prev, [partido.partidoId]: { ...prev[partido.partidoId], local: e.target.value, visitante: prev[partido.partidoId]?.visitante ?? '' } }))}
+                                  onBlur={() => predecirExacto(partido.partidoId, marcadores[partido.partidoId]?.local ?? '', marcadores[partido.partidoId]?.visitante ?? '')}
+                                  placeholder="0"
+                                  className="w-full text-center text-2xl font-bold py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 transition"
+                                />
+                              </div>
+                              <span className="text-zinc-500 text-xl font-bold">-</span>
+                              <div className="flex-1 text-center">
+                                <p className="text-xs text-zinc-500 mb-1">{partido.equipoVisitante}</p>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="20"
+                                  value={marcadores[partido.partidoId]?.visitante ?? ''}
+                                  onChange={(e) => setMarcadores(prev => ({ ...prev, [partido.partidoId]: { ...prev[partido.partidoId], visitante: e.target.value, local: prev[partido.partidoId]?.local ?? '' } }))}
+                                  onBlur={() => predecirExacto(partido.partidoId, marcadores[partido.partidoId]?.local ?? '', marcadores[partido.partidoId]?.visitante ?? '')}
+                                  placeholder="0"
+                                  className="w-full text-center text-2xl font-bold py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:outline-none focus:border-emerald-500 transition"
+                                />
+                              </div>
+                            </div>
+                            {miPred?.prediccion && (
+                              <p className="text-center text-xs text-emerald-400">✓ Guardado: {miPred.prediccion}</p>
+                            )}
+                            {guardado === partido.partidoId && (
+                              <p className="text-center text-xs text-emerald-400">✓ Predicción guardada automáticamente</p>
+                            )}
                           </div>
                         ) : (
                           <div className="space-y-2">
