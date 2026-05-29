@@ -19,6 +19,12 @@ export default function PerfilPage() {
   const [guardando, setGuardando] = useState(false)
   const [subiendoFoto, setSubiendoFoto] = useState(false)
   const [preview, setPreview] = useState(null)
+  const [passwordActual, setPasswordActual] = useState('')
+  const [passwordNueva, setPasswordNueva] = useState('')
+  const [passwordConfirmar, setPasswordConfirmar] = useState('')
+  const [mensajePassword, setMensajePassword] = useState('')
+  const [cambiandoPassword, setCambiandoPassword] = useState(false)
+  const [mostrarFormPassword, setMostrarFormPassword] = useState(false)
 
   useEffect(() => {
     const cargarPerfil = async () => {
@@ -82,6 +88,36 @@ export default function PerfilPage() {
       setPreview(null)
     } finally {
       setSubiendoFoto(false)
+    }
+  }
+
+  const handleCambiarPassword = async (e) => {
+    e.preventDefault()
+    setMensajePassword('')
+    if (passwordNueva !== passwordConfirmar) {
+      setMensajePassword('Las contraseñas nuevas no coinciden')
+      return
+    }
+    if (passwordNueva.length < 6) {
+      setMensajePassword('La nueva contraseña debe tener al menos 6 caracteres')
+      return
+    }
+    setCambiandoPassword(true)
+    try {
+      await apiRequest('/users/me/password', {
+        method: 'PUT',
+        body: JSON.stringify({ passwordActual, passwordNueva })
+      })
+      setMensajePassword('✓ Contraseña actualizada correctamente')
+      setPasswordActual('')
+      setPasswordNueva('')
+      setPasswordConfirmar('')
+      setMostrarFormPassword(false)
+      setTimeout(() => setMensajePassword(''), 3000)
+    } catch (error) {
+      setMensajePassword(error.message)
+    } finally {
+      setCambiandoPassword(false)
     }
   }
 
@@ -191,6 +227,44 @@ export default function PerfilPage() {
                   </button>
                   {mensaje && <p className={`text-center text-sm ${mensaje.startsWith('✓') ? 'text-emerald-400' : 'text-red-400'}`}>{mensaje}</p>}
                 </form>
+              </div>
+
+              {/* Cambiar contraseña */}
+              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-white font-semibold">Contraseña</h2>
+                    <p className="text-zinc-500 text-sm mt-0.5">Cambia tu contraseña de acceso</p>
+                  </div>
+                  <button
+                    onClick={() => { setMostrarFormPassword(!mostrarFormPassword); setMensajePassword('') }}
+                    className="text-sm px-4 py-2 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition"
+                  >
+                    {mostrarFormPassword ? 'Cancelar' : 'Cambiar'}
+                  </button>
+                </div>
+
+                {mostrarFormPassword && (
+                  <form onSubmit={handleCambiarPassword} className="mt-4 space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-widest">Contraseña actual</label>
+                      <input type="password" value={passwordActual} onChange={(e) => setPasswordActual(e.target.value)} placeholder="••••••••" className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition" required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-widest">Nueva contraseña</label>
+                      <input type="password" value={passwordNueva} onChange={(e) => setPasswordNueva(e.target.value)} placeholder="Mínimo 6 caracteres" className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition" required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-widest">Confirmar nueva contraseña</label>
+                      <input type="password" value={passwordConfirmar} onChange={(e) => setPasswordConfirmar(e.target.value)} placeholder="Repite la nueva contraseña" className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition" required />
+                    </div>
+                    <button type="submit" disabled={cambiandoPassword} className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold transition disabled:opacity-50">
+                      {cambiandoPassword ? 'Actualizando...' : 'Actualizar contraseña'}
+                    </button>
+                    {mensajePassword && <p className={`text-center text-sm ${mensajePassword.startsWith('✓') ? 'text-emerald-400' : 'text-red-400'}`}>{mensajePassword}</p>}
+                  </form>
+                )}
+                {mensajePassword && !mostrarFormPassword && <p className={`text-center text-sm mt-3 ${mensajePassword.startsWith('✓') ? 'text-emerald-400' : 'text-red-400'}`}>{mensajePassword}</p>}
               </div>
 
               {/* Historial */}

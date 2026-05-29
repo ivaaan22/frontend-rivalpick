@@ -79,6 +79,7 @@ export default function LoginPage() {
             </form>
             {mensaje && <div className="mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20"><p className="text-red-400 text-sm text-center">{mensaje}</p></div>}
             <p className="mt-6 text-center text-sm text-zinc-500">¿No tienes cuenta?{' '}<a href="/registro" className="text-emerald-400 hover:text-emerald-300 font-medium transition">Crea una gratis</a></p>
+              <p className="mt-2 text-center text-sm text-zinc-600">¿Olvidaste tu contraseña?{' '}<a href="/perfil" className="text-zinc-400 hover:text-zinc-300 transition">Cámbiala desde tu perfil</a></p>
           </div>
         </div>
       </div>
