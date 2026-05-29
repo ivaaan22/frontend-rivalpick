@@ -411,8 +411,8 @@ S'han verificat els criteris d'accessibilitat de nivell A més rellevants:
 | Email | Contrasenya | Rol |
 |---|---|---|
 | ivangarciac10@gmail.com | Ivancete@1803 | superadmin |
-| joelcs@test.com | 123456 | usuari |
-| oscar@test.com | 123456 | usuari |
+| joel@gmail.com | Joel123 | usuari |
+| oscar@gmail.com | oscar123 | usuari |
 
 ### Grups de prova
 
