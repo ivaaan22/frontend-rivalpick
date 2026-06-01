@@ -1,428 +1,428 @@
-# Memòria del Projecte — RivalPick
+# Memoria del Proyecto — RivalPick
 
 ---
 
-## 1. Títol del projecte
+## 1. Título del proyecto
 
-**RivalPick** — Plataforma de prediccions de futbol entre amics
-
----
-
-## 2. Proposta: explicació, objectius i justificació
-
-### Explicació
-
-RivalPick és una aplicació web SaaS que permet a grups d'amics competir fent prediccions de partits de futbol. Els usuaris creen o s'uneixen a grups, trien una competició (LaLiga, Premier League, Bundesliga, Serie A, Ligue 1, Champions League o Mundial 2026) i prediuen els resultats de cada jornada, ja sigui en format clàssic (1X2) o marcador exacte. El sistema resol automàticament les prediccions quan els partits acaben i actualitza el rànquing del grup.
-
-### Objectius
-
-- Oferir una experiència de competició social al voltant del futbol, sense apostes de diners.
-- Permetre crear grups privats o públics amb codi d'invitació.
-- Gestionar partits de 7 competicions (2.014 partits a la base de dades).
-- Implementar dos modes de joc: clàssic (1X2, 3 punts) i marcador exacte (5 punts).
-- Desplegar l'aplicació en producció accessible des de qualsevol dispositiu.
-
-### Justificació
-
-Les aplicacions de porres entre amics existents (com Comunio o La Quiniela) solen estar lligades a plataformes oficials o impliquen diners. RivalPick cobreix la necessitat d'una eina lliure, personalitzable i centrada en la diversió entre grups tancats d'amics. A més, el projecte serveix per demostrar competències en desenvolupament full-stack modern (Next.js + Node.js + MongoDB).
+**RivalPick** — Plataforma de predicciones de fútbol entre amigos
 
 ---
 
-## 3. Stack tecnològic i justificació
+## 2. Propuesta: explicación, objetivos y justificación
+
+### Explicación
+
+RivalPick es una aplicación web SaaS que permite a grupos de amigos competir haciendo predicciones de partidos de fútbol. Los usuarios crean o se unen a grupos, eligen una competición (LaLiga, Premier League, Bundesliga, Serie A, Ligue 1, Champions League o Mundial 2026) y predicen los resultados de cada jornada, ya sea en formato clásico (1X2) o marcador exacto. El sistema resuelve automáticamente las predicciones cuando los partidos terminan y actualiza el ranking del grupo.
+
+### Objetivos
+
+- Ofrecer una experiencia de competición social alrededor del fútbol, sin apuestas de dinero.
+- Permitir crear grupos privados o públicos con código de invitación.
+- Gestionar partidos de 7 competiciones (2.014 partidos en la base de datos).
+- Implementar dos modos de juego: clásico (1X2, 3 puntos) y marcador exacto (5 puntos).
+- Desplegar la aplicación en producción accesible desde cualquier dispositivo.
+
+### Justificación
+
+Las aplicaciones de porras entre amigos existentes (como Comunio o La Quiniela) suelen estar ligadas a plataformas oficiales o implican dinero. RivalPick cubre la necesidad de una herramienta libre, personalizable y centrada en la diversión entre grupos cerrados de amigos. Además, el proyecto sirve para demostrar competencias en desarrollo full-stack moderno (Next.js + Node.js + MongoDB).
+
+---
+
+## 3. Stack tecnológico y justificación
 
 ### Frontend
 
-| Tecnologia | Versió | Justificació |
+| Tecnología | Versión | Justificación |
 |---|---|---|
-| Next.js | 16.2 | Framework React amb App Router, SSR i desplegament fàcil a Vercel |
-| React | 19 | Biblioteca de components declaratius |
-| Tailwind CSS | 4 | Utilitats CSS per a disseny ràpid i consistent |
+| Next.js | 16.2 | Framework React con App Router, SSR y despliegue fácil a Vercel |
+| React | 19 | Biblioteca de componentes declarativos |
+| Tailwind CSS | 4 | Utilidades CSS para diseño rápido y consistente |
 
 ### Backend
 
-| Tecnologia | Versió | Justificació |
+| Tecnología | Versión | Justificación |
 |---|---|---|
-| Node.js | 18+ | Entorn JavaScript al servidor, ecosistema ampli |
-| Express | 5 | Framework minimalista per a API REST |
-| MongoDB Atlas | Cloud | Base de dades NoSQL flexible per a dades de partits i usuaris |
-| Mongoose | 8 | ODM per a MongoDB amb esquemes i validació |
-| JWT | — | Autenticació sense sessió, compatible amb SPA |
-| bcryptjs | — | Encriptació de contrasenyes |
-| Multer / Base64 | — | Gestió de fotos de perfil (guardat a MongoDB com a Base64) |
+| Node.js | 18+ | Entorno JavaScript en el servidor, ecosistema amplio |
+| Express | 5 | Framework minimalista para API REST |
+| MongoDB Atlas | Cloud | Base de datos NoSQL flexible para datos de partidos y usuarios |
+| Mongoose | 8 | ODM para MongoDB con esquemas y validación |
+| JWT | — | Autenticación sin sesión, compatible con SPA |
+| bcryptjs | — | Encriptación de contraseñas |
+| Multer / Base64 | — | Gestión de fotos de perfil (guardado en MongoDB como Base64) |
 
-### Desplegament
+### Despliegue
 
-| Servei | Ús |
+| Servicio | Uso |
 |---|---|
-| Vercel | Desplegament del frontend (Next.js) |
-| Render | Desplegament del backend (Node.js) |
-| MongoDB Atlas | Base de dades al núvol |
-| GitHub | Control de versions i CI/CD |
+| Vercel | Despliegue del frontend (Next.js) |
+| Render | Despliegue del backend (Node.js) |
+| MongoDB Atlas | Base de datos en la nube |
+| GitHub | Control de versiones y CI/CD |
 
-### Justificació del stack
+### Justificación del stack
 
-S'ha triat un stack JavaScript pur (JS al frontend i al backend) per maximitzar la reutilització de codi i reduir la corba d'aprenentatge. MongoDB és idoni per a dades de partits amb estructura variable (fases, grups, jornades). Next.js amb App Router permet pàgines client-side sense sacrificar SEO. El desplegament a Vercel + Render és gratuït per a projectes escolars i ofereix CI/CD automàtic des de GitHub.
+Se ha elegido un stack JavaScript puro (JS en el frontend y en el backend) para maximizar la reutilización de código y reducir la curva de aprendizaje. MongoDB es idóneo para datos de partidos con estructura variable (fases, grupos, jornadas). Next.js con App Router permite páginas client-side sin sacrificar SEO. El despliegue a Vercel + Render es gratuito para proyectos escolares y ofrece CI/CD automático desde GitHub.
 
 ---
 
-## 4. Eines de desenvolupament i CI/CD, incloent ús d'IA i metodologia de treball
+## 4. Herramientas de desarrollo y CI/CD, incluyendo uso de IA y metodología de trabajo
 
-### Eines de desenvolupament
+### Herramientas de desarrollo
 
-- **Visual Studio Code** — Editor principal amb extensions ESLint, Prettier i GitLens.
-- **Git + GitHub** — Control de versions amb branques per funcionalitat (`feature/...`) i fusió a `main`.
-- **Postman** — Proves manuals dels endpoints de l'API REST durant el desenvolupament.
-- **MongoDB Compass** — Explorador visual de la base de dades per verificar dades seed.
-- **Node.js scripts** — Scripts de seed (`seedPartidos.js`, `seedMundial.js`) per poblar la base de dades.
+- **Visual Studio Code** — Editor principal con extensiones ESLint, Prettier y GitLens.
+- **Git + GitHub** — Control de versiones con ramas por funcionalidad (`feature/...`) y fusión a `main`.
+- **Postman** — Pruebas manuales de los endpoints de la API REST durante el desarrollo.
+- **MongoDB Compass** — Explorador visual de la base de datos para verificar datos seed.
+- **Node.js scripts** — Scripts de seed (`seedPartidos.js`, `seedMundial.js`) para poblar la base de datos.
 
 ### CI/CD
 
-- **Vercel** despliega automàticament el frontend cada vegada que es fa push a la branca `main` del repositori `ivaaan22/frontend-rivalpick`.
-- **Render** despliega automàticament el backend cada vegada que es fa push a la branca `main` del repositori `ivaaan22/Backend-Rivalpick`.
-- No s'han configurat tests automatitzats en el pipeline de CI, però es fan proves manuals de cada funcionalitat abans de cada commit.
+- **Vercel** despliega automáticamente el frontend cada vez que se hace push a la rama `main` del repositorio `ivaaan22/frontend-rivalpick`.
+- **Render** despliega automáticamente el backend cada vez que se hace push a la rama `main` del repositorio `ivaaan22/Backend-Rivalpick`.
+- No se han configurado tests automatizados en el pipeline de CI, pero se hacen pruebas manuales de cada funcionalidad antes de cada commit.
 
-### Ús d'IA
+### Uso de IA
 
-S'ha utilitzat **Claude (Anthropic)** com a assistent de desenvolupament al llarg de tot el projecte. L'IA ha ajudat en:
+Se ha utilizado **Claude (Anthropic)** como asistente de desarrollo a lo largo de todo el proyecto. La IA ha ayudado en:
 
-- Generació de codi de components React i controladors Express.
-- Debugging d'errors (500, CORS, Mongoose validation errors).
-- Disseny de l'arquitectura de la base de dades.
-- Creació dels scripts de seed amb 2.014 partits reals.
-- Proves d'usuari automatitzades mitjançant la integració de Claude amb el navegador.
-- Redacció de documentació (README, memòria).
+- Generación de código de componentes React y controladores Express.
+- Debugging de errores (500, CORS, errores de validación de Mongoose).
+- Diseño de la arquitectura de la base de datos.
+- Creación de los scripts de seed con 2.014 partidos reales.
+- Pruebas de usuario automatizadas mediante la integración de Claude con el navegador.
+- Redacción de documentación (README, memoria).
 
-L'IA s'ha fet servir com a copilot, revisant sempre el codi generat i adaptant-lo a les necessitats específiques del projecte.
+La IA se ha usado como copiloto, revisando siempre el código generado y adaptándolo a las necesidades específicas del proyecto.
 
-### Metodologia de treball
+### Metodología de trabajo
 
-S'ha seguit una metodologia **àgil simplificada** amb sprints setmanals:
+Se ha seguido una metodología **ágil simplificada** con sprints semanales:
 
-- Reunions breus al principi de cada sprint per definir les tasques.
-- Ús de branques Git per a cada funcionalitat.
-- Proves manuals abans de cada merge a `main`.
-- Desplegament continu a producció (Vercel + Render) per validar en entorn real.
+- Reuniones breves al principio de cada sprint para definir las tareas.
+- Uso de ramas Git para cada funcionalidad.
+- Pruebas manuales antes de cada merge a `main`.
+- Despliegue continuo a producción (Vercel + Render) para validar en entorno real.
 
 ---
 
-## 5. Planificació
+## 5. Planificación
 
-### Històries d'usuari principals
+### Historias de usuario principales
 
-| ID | Com a... | Vull... | Per tal de... |
+| ID | Como... | Quiero... | Para poder... |
 |---|---|---|---|
-| HU-01 | Usuari | Registrar-me i iniciar sessió | Accedir a la plataforma de forma segura |
-| HU-02 | Usuari | Crear un grup i convidar amics | Competir amb el meu cercle |
-| HU-03 | Usuari | Unir-me a un grup amb codi | Participar en una porra existent |
-| HU-04 | Usuari | Veure els partits de la meva lliga | Saber quins partits he de predir |
-| HU-05 | Usuari | Fer les meves prediccions (1X2 o exacte) | Competir i acumular punts |
-| HU-06 | Usuari | Veure els resultats i el rànquing | Saber com estic al grup |
-| HU-07 | Usuari | Veure el meu historial i estadístiques | Analitzar el meu rendiment |
-| HU-08 | Usuari | Pujar una foto de perfil | Personalitzar el meu compte |
-| HU-09 | Admin grup | Resolver una jornada | Actualitzar els punts automàticament |
-| HU-10 | Superadmin | Gestionar usuaris i grups | Administrar la plataforma |
+| HU-01 | Usuario | Registrar me e iniciar sesión | Acceder a la plataforma de forma segura |
+| HU-02 | Usuario | Crear un grupo e invitar amigos | Competir con mi círculo |
+| HU-03 | Usuario | Unirme a un grupo con código | Participar en una porra existente |
+| HU-04 | Usuario | Ver los partidos de mi liga | Saber qué partidos tengo que predecir |
+| HU-05 | Usuario | Hacer mis predicciones (1X2 o exacto) | Competir y acumular puntos |
+| HU-06 | Usuario | Ver los resultados y el ranking | Saber cómo estoy en el grupo |
+| HU-07 | Usuario | Ver mi historial y estadísticas | Analizar mi rendimiento |
+| HU-08 | Usuario | Subir una foto de perfil | Personalizar mi cuenta |
+| HU-09 | Admin grupo | Resolver una jornada | Actualizar los puntos automáticamente |
+| HU-10 | Superadmin | Gestionar usuarios y grupos | Administrar la plataforma |
 
 ### Sprints
 
-| Sprint | Durada | Funcionalitats |
+| Sprint | Duración | Funcionalidades |
 |---|---|---|
-| Sprint 1 | Setmana 1 | Auth (registre, login, JWT), model d'usuari |
-| Sprint 2 | Setmana 2 | Grups (crear, unir-se, editar, expulsar), membresies |
-| Sprint 3 | Setmana 3 | API de partits pròpia (MongoDB), seed de 1.941 partits |
-| Sprint 4 | Setmana 4 | Prediccions (1X2), resolució de jornades, rànquings |
-| Sprint 5 | Setmana 5 | Mundial 2026 (73 partits), Champions per fases, mode exacte |
-| Sprint 6 | Setmana 6 | Foto de perfil (Base64), Avatar reutilitzable, dashboard |
-| Sprint 7 | Setmana 7 | Desplegament (Vercel + Render), correccions de bugs, memòria |
+| Sprint 1 | Semana 1 | Auth (registro, login, JWT), modelo de usuario |
+| Sprint 2 | Semana 2 | Grupos (crear, unirse, editar, expulsar), membresías |
+| Sprint 3 | Semana 3 | API de partidos propia (MongoDB), seed de 1.941 partidos |
+| Sprint 4 | Semana 4 | Predicciones (1X2), resolución de jornadas, rankings |
+| Sprint 5 | Semana 5 | Mundial 2026 (73 partidos), Champions por fases, modo exacto |
+| Sprint 6 | Semana 6 | Foto de perfil (Base64), Avatar reutilizable, dashboard |
+| Sprint 7 | Semana 7 | Despliegue (Vercel + Render), correcciones de bugs, memoria |
 
-### Diagrama de Gantt (simplificat)
+### Diagrama de Gantt (simplificado)
 
 ```
-Setmana:    1    2    3    4    5    6    7
+Semana:    1    2    3    4    5    6    7
 Auth        ████
-Grups            ████
+Grupos            ████
 Partidos              ████
-Prediccions                ████
-Mundial/Exacte                  ████
+Predicciones                ████
+Mundial/Exacto                  ████
 Foto/Avatar                          ████
 Deploy/Docs                               ████
 ```
 
 ---
 
-## 6. Casos d'ús i diagrama de casos d'ús
+## 6. Casos de uso y diagrama de casos de uso
 
-### Actors
+### Actores
 
-- **Usuari no autenticat** — Pot registrar-se, iniciar sessió i recuperar la contrasenya.
-- **Usuari autenticat** — Pot fer prediccions, veure resultats, gestionar el seu perfil.
-- **Admin de grup** — Pot editar el grup, expulsar membres i resolver jornades.
-- **Superadmin** — Accés al panell d'administració global.
+- **Usuario no autenticado** — Puede registrarse, iniciar sesión y recuperar la contraseña.
+- **Usuario autenticado** — Puede hacer predicciones, ver resultados, gestionar su perfil.
+- **Admin de grupo** — Puede editar el grupo, expulsar miembros y resolver jornadas.
+- **Superadmin** — Acceso al panel de administración global.
 
-### Casos d'ús principals
+### Casos de uso principales
 
-| Cas d'ús | Actor | Descripció |
+| Caso de uso | Actor | Descripción |
 |---|---|---|
-| CU-01 Registre | Usuari no autenticat | L'usuari crea un compte amb nom, email, username i contrasenya |
-| CU-02 Login | Usuari no autenticat | L'usuari inicia sessió i rep un token JWT |
-| CU-03 Recuperar contrasenya | Usuari no autenticat | L'usuari canvia la contrasenya verificant email i contrasenya actual |
-| CU-04 Crear grup | Usuari autenticat | Crea un grup triant lliga, mode i visibilitat |
-| CU-05 Unir-se a grup | Usuari autenticat | S'uneix amb un codi de 6 caràcters |
-| CU-06 Fer prediccions | Usuari autenticat | Tria 1/X/2 o introdueix marcador exacte per a cada partit |
-| CU-07 Veure resultats | Usuari autenticat | Consulta resultats i rànquing d'una jornada |
-| CU-08 Gestionar perfil | Usuari autenticat | Edita dades i puja foto de perfil |
-| CU-09 Resolver jornada | Admin de grup | Resol les prediccions i actualitza punts |
-| CU-10 Panell admin | Superadmin | Veu estadístiques globals i gestiona usuaris/grups |
+| CU-01 Registro | Usuario no autenticado | El usuario crea una cuenta con nombre, email, username y contraseña |
+| CU-02 Login | Usuario no autenticado | El usuario inicia sesión y recibe un token JWT |
+| CU-03 Recuperar contraseña | Usuario no autenticado | El usuario cambia la contraseña verificando email y contraseña actual |
+| CU-04 Crear grupo | Usuario autenticado | Crea un grupo eligiendo liga, modo y visibilidad |
+| CU-05 Unirse a grupo | Usuario autenticado | Se une con un código de 6 caracteres |
+| CU-06 Hacer predicciones | Usuario autenticado | Elige 1/X/2 o introduce marcador exacto para cada partido |
+| CU-07 Ver resultados | Usuario autenticado | Consulta resultados y ranking de una jornada |
+| CU-08 Gestionar perfil | Usuario autenticado | Edita datos y sube foto de perfil |
+| CU-09 Resolver jornada | Admin de grupo | Resuelve las predicciones y actualiza puntos |
+| CU-10 Panel admin | Superadmin | Ve estadísticas globales y gestiona usuarios/grupos |
 
-### Diagrama de casos d'ús (text)
+### Diagrama de casos de uso (texto)
 
 ```
 ┌─────────────────────────────────────────────┐
 │                  RivalPick                  │
 │                                             │
-│  [Usuari no autenticat]                     │
-│    ├── CU-01 Registre                       │
-│    ├── CU-02 Login                          │
-│    └── CU-03 Recuperar contrasenya          │
+│  [Usuario no autenticado]                    │
+│    ├── CU-01 Registro                        │
+│    ├── CU-02 Login                           │
+│    └── CU-03 Recuperar contraseña            │
 │                                             │
-│  [Usuari autenticat]                        │
-│    ├── CU-04 Crear grup                     │
-│    ├── CU-05 Unir-se a grup                 │
-│    ├── CU-06 Fer prediccions                │
-│    ├── CU-07 Veure resultats                │
-│    └── CU-08 Gestionar perfil              │
+│  [Usuario autenticado]                       │
+│    ├── CU-04 Crear grupo                     │
+│    ├── CU-05 Unirse a grupo                  │
+│    ├── CU-06 Hacer predicciones              │
+│    ├── CU-07 Ver resultados                  │
+│    └── CU-08 Gestionar perfil                │
 │                                             │
-│  [Admin de grup] (hereta Usuari autenticat) │
-│    └── CU-09 Resolver jornada               │
+│  [Admin de grupo] (hereda Usuario autenticado) │
+│    └── CU-09 Resolver jornada                │
 │                                             │
-│  [Superadmin] (hereta Admin de grup)        │
-│    └── CU-10 Panell d'administració         │
+│  [Superadmin] (hereda Admin de grupo)        │
+│    └── CU-10 Panel de administración         │
 └─────────────────────────────────────────────┘
 ```
 
 ---
 
-## 7. Explicació del codi per blocs
+## 7. Explicación del código por bloques
 
 ### 7.1 Backend — Estructura general
 
-El backend segueix el patró **MVC** (Model-View-Controller) adaptat a una API REST:
+El backend sigue el patrón **MVC** (Model-View-Controller) adaptado a una API REST:
 
 ```
 src/
-├── index.js              # Punt d'entrada: Express, middleware, rutes
-├── models/               # Esquemes Mongoose (MongoDB)
-├── controllers/          # Lògica de negoci de cada recurs
-├── routes/               # Definició d'endpoints i middleware
+├── index.js              # Punto de entrada: Express, middleware, rutas
+├── models/               # Esquemas Mongoose (MongoDB)
+├── controllers/          # Lógica de negocio de cada recurso
+├── routes/               # Definición de endpoints y middleware
 └── middleware/           # Auth (JWT), upload (Base64)
 ```
 
-#### index.js — Configuració d'Express
+#### index.js — Configuración de Express
 
 ```javascript
 app.use(cors())
-app.use(express.json({ limit: '10mb' }))  // Accepta imatges Base64
-app.use('/uploads', express.static(...))   // Serveix fitxers estàtics
+app.use(express.json({ limit: '10mb' }))  // Acepta imágenes Base64
+app.use('/uploads', express.static(...))   // Sirve ficheros estáticos
 ```
 
-S'han registrat 8 grups de rutes: auth, users, grupos, partidos, predicciones, resolución, dashboard i admin.
+Se han registrado 8 grupos de rutas: auth, users, grupos, partidos, predicciones, resolución, dashboard y admin.
 
-### 7.2 Models de dades
+### 7.2 Modelos de datos
 
-#### Model Usuari
-Camps principals: `nombre`, `email`, `password` (bcrypt), `username`, `equipoFavorito`, `fotoPerfil` (Base64), `rol` (usuari/superadmin).
+#### Modelo Usuario
+Campos principales: `nombre`, `email`, `password` (bcrypt), `username`, `equipoFavorito`, `fotoPerfil` (Base64), `rol` (usuario/superadmin).
 
-#### Model Grup
-Camps: `nombre`, `liga` (enum de 7 competicions), `modo` (1X2 o exacte), `visibilitat`, `codigoInvitacion` (6 caràcters aleatoris), `creadoPor`.
+#### Modelo Grupo
+Campos: `nombre`, `liga` (enum de 7 competiciones), `modo` (1X2 o exacto), `visibilidad`, `codigoInvitacion` (6 caracteres aleatorios), `creadoPor`.
 
-#### Model Partit
-Camps: `partidoId` (clau única com `WC2026-A1`), `liga`, `jornada`, `fase`, `grupo`, `fecha`, `estado`, `equipoLocal/Visitante`, `escudoLocal/Visitante`, `golesLocal/Visitante`.
+#### Modelo Partido
+Campos: `partidoId` (clave única como `WC2026-A1`), `liga`, `jornada`, `fase`, `grupo`, `fecha`, `estado`, `equipoLocal/Visitante`, `escudoLocal/Visitante`, `golesLocal/Visitante`.
 
-#### Model Predicció
-Camps: `userId`, `grupoId`, `partidoId`, `jornada`, `liga`, `prediccion` (string: `'1'`, `'X'`, `'2'` o `'2-1'`), `resuelta`.
+#### Modelo Predicción
+Campos: `userId`, `grupoId`, `partidoId`, `jornada`, `liga`, `prediccion` (string: `'1'`, `'X'`, `'2'` o `'2-1'`), `resuelta`.
 
-#### Model Puntuació
-Camps: `userId`, `grupoId`, `prediccionId`, `jornada`, `puntos` (3 per 1X2, 5 per exacte), `acerto`.
+#### Modelo Puntuación
+Campos: `userId`, `grupoId`, `prediccionId`, `jornada`, `puntos` (3 por 1X2, 5 por exacto), `acierto`.
 
-### 7.3 Autenticació (JWT)
+### 7.3 Autenticación (JWT)
 
-El flux d'autenticació és el següent:
+El flujo de autenticación es el siguiente:
 
-1. L'usuari envia email i contrasenya a `POST /api/auth/login`.
-2. El servidor verifica la contrasenya amb `bcrypt.compare`.
-3. Si és correcta, genera un token JWT amb `jwt.sign({ id, rol }, JWT_SECRET, { expiresIn: '7d' })`.
-4. El client guarda el token al `localStorage` i l'envia en cada petició com a `Authorization: Bearer <token>`.
-5. El middleware `verificarToken` valida el token i afegeix l'usuari a `req.usuario`.
+1. El usuario envía email y contraseña a `POST /api/auth/login`.
+2. El servidor verifica la contraseña con `bcrypt.compare`.
+3. Si es correcta, genera un token JWT con `jwt.sign({ id, rol }, JWT_SECRET, { expiresIn: '7d' })`.
+4. El cliente guarda el token en `localStorage` y lo envía en cada petición como `Authorization: Bearer <token>`.
+5. El middleware `verificarToken` valida el token y añade el usuario a `req.usuario`.
 
-### 7.4 API de partits pròpia
+### 7.4 API de partidos propia
 
-En lloc d'usar una API externa en temps real, els partits es guarden a MongoDB. Això garanteix:
-- Disponibilitat sense dependre de tercers.
-- Control total sobre les dades (fases, grups del Mundial, escudos).
-- Possibilitat d'actualitzar resultats manualment amb `updatePartido.js`.
+En lugar de usar una API externa en tiempo real, los partidos se guardan en MongoDB. Esto garantiza:
+- Disponibilidad sin depender de terceros.
+- Control total sobre los datos (fases, grupos del Mundial, escudos).
+- Posibilidad de actualizar resultados manualmente con `updatePartido.js`.
 
-El seed inicial usa l'API de `football-data.org` per descarregar 1.941 partits de les 5 lligues i la Champions. Els 73 partits del Mundial 2026 s'han introduït manualment.
+El seed inicial usa la API de `football-data.org` para descargar 1.941 partidos de las 5 ligas y la Champions. Los 73 partidos del Mundial 2026 se han introducido manualmente.
 
-### 7.5 Sistema de prediccions
+### 7.5 Sistema de predicciones
 
-**Mode 1X2:**
+**Modo 1X2:**
 ```javascript
-// L'usuari clica un botó (1, X o 2) → es guarda a MongoDB
+// El usuario pulsa un botón (1, X o 2) → se guarda en MongoDB
 POST /api/predicciones { grupoId, partidoId, jornada, liga, prediccion: '1' }
 ```
 
-**Mode marcador exacte:**
+**Modo marcador exacto:**
 ```javascript
-// L'usuari introdueix gols locals i visitants → es guarda com a "2-1"
+// El usuario introduce goles locales y visitantes → se guarda como "2-1"
 POST /api/predicciones { grupoId, partidoId, jornada, liga, prediccion: '2-1' }
 ```
 
-**Resolució de jornada:**
+**Resolución de jornada:**
 ```javascript
-// Mode 1X2: 3 punts si encerta el guanyador/empat
-// Mode exacte: 5 punts si encerta el marcador exacte
+// Modo 1X2: 3 puntos si acierta el ganador/empate
+// Modo exacto: 5 puntos si acierta el marcador exacto
 if (grupo.modo === 'exacto') {
   const marcadorReal = `${partido.golesLocal}-${partido.golesVisitante}`
-  acerto = prediccion.prediccion === marcadorReal
-  puntos = acerto ? 5 : 0
+  acierto = prediccion.prediccion === marcadorReal
+  puntos = acierto ? 5 : 0
 }
 ```
 
-### 7.6 Frontend — Estructura de pàgines
+### 7.6 Frontend — Estructura de páginas
 
-El frontend usa el **App Router** de Next.js amb components client (`'use client'`):
+El frontend usa el **App Router** de Next.js con componentes client (`'use client'`):
 
 ```
 src/app/
-├── page.js              # Dashboard amb alertes de jornada
-├── login/               # Autenticació
-├── registro/            # Registre de nou usuari
-├── recuperar-password/  # Canvi de contrasenya sense sessió
-├── grupos/              # Llistat, crear, unir-se, detall
-├── partidos/            # Vista de partits per lliga i jornada
-├── predicciones/        # Fer prediccions (1X2 o exacte)
-├── resultados/          # Resultats i rànquings per jornada
-├── historial/           # Estadístiques i gràfica de punts
-├── perfil/              # Editar dades, foto, contrasenya
-└── admin/               # Panell superadmin
+├── page.js              # Dashboard con alertas de jornada
+├── login/               # Autenticación
+├── registro/            # Registro de nuevo usuario
+├── recuperar-password/  # Cambio de contraseña sin sesión
+├── grupos/              # Listado, crear, unirse, detalle
+├── partidos/            # Vista de partidos por liga y jornada
+├── predicciones/        # Hacer predicciones (1X2 o exacto)
+├── resultados/          # Resultados y rankings por jornada
+├── historial/           # Estadísticas y gráfico de puntos
+├── perfil/              # Editar datos, foto, contraseña
+└── admin/               # Panel superadmin
 ```
 
-### 7.7 Component Avatar
+### 7.7 Componente Avatar
 
-Component reutilitzable que mostra la foto de perfil (Base64) o les inicials si no n'hi ha:
+Componente reutilizable que muestra la foto de perfil (Base64) o las iniciales si no hay:
 
 ```jsx
 <Avatar usuario={usuario} size="md" />
-// Mides: xs, sm, md, lg, xl
+// Tamaños: xs, sm, md, lg, xl
 ```
 
-S'usa a: Navbar, detall de grup (membres), resultats (rànquings), panell admin.
+Se usa en: Navbar, detalle de grupo (miembros), resultados (rankings), panel admin.
 
-### 7.8 Foto de perfil — Base64 a MongoDB
+### 7.8 Foto de perfil — Base64 en MongoDB
 
-En lloc de Cloudinary o Multer amb sistema de fitxers (efímer a Render), la foto es converteix a Base64 al navegador i es guarda directament a MongoDB:
+En lugar de Cloudinary o Multer con sistema de ficheros (efímero en Render), la foto se convierte a Base64 en el navegador y se guarda directamente en MongoDB:
 
 ```javascript
-// Frontend: comprimeix a 800px i qualitat 0.8 abans d'enviar
+// Frontend: comprime a 800px y calidad 0.8 antes de enviar
 const base64 = await comprimirImagen(file, 800, 0.8)
 await apiRequest('/users/me/foto', { method: 'POST', body: JSON.stringify({ foto: base64 }) })
 
-// Backend: guarda el string Base64 al document de l'usuari
+// Backend: guarda el string Base64 en el documento del usuario
 usuario.fotoPerfil = foto
 await usuario.save()
 ```
 
-Avantatge: la foto persisteix per sempre a MongoDB Atlas, independent del servidor.
+Ventaja: la foto persiste para siempre en MongoDB Atlas, independiente del servidor.
 
 ---
 
-## 8. Proves: testing, usabilitat i verificació d'accessibilitat nivell A
+## 8. Pruebas: testing, usabilidad y verificación de accesibilidad nivel A
 
-### 8.1 Testing manual de funcionalitats
+### 8.1 Testing manual de funcionalidades
 
-S'han fet proves manuals de totes les funcionalitats principals:
+Se han hecho pruebas manuales de todas las funcionalidades principales:
 
-| Funcionalitat | Resultat |
+| Funcionalidad | Resultado |
 |---|---|
-| Registre d'usuari | ✅ Correcte |
-| Login i logout | ✅ Correcte |
-| Recuperar contrasenya | ✅ Correcte |
-| Crear grup (totes les lligues) | ✅ Correcte |
-| Unir-se a grup amb codi | ✅ Correcte |
-| Fer prediccions 1X2 | ✅ Correcte |
-| Fer prediccions marcador exacte | ✅ Correcte |
-| Veure partits (7 competicions) | ✅ Correcte |
-| Resolver jornada | ✅ Correcte |
-| Veure resultats i rànquing | ✅ Correcte |
-| Historial per grup | ✅ Correcte |
-| Pujar foto de perfil | ✅ Persistent a MongoDB |
-| Avatar a tota l'app | ✅ Correcte |
-| Panell admin | ✅ Correcte |
-| Desplegament Vercel + Render | ✅ Operatiu |
+| Registro de usuario | ✅ Correcto |
+| Login y logout | ✅ Correcto |
+| Recuperar contraseña | ✅ Correcto |
+| Crear grupo (todas las ligas) | ✅ Correcto |
+| Unirse a grupo con código | ✅ Correcto |
+| Hacer predicciones 1X2 | ✅ Correcto |
+| Hacer predicciones marcador exacto | ✅ Correcto |
+| Ver partidos (7 competiciones) | ✅ Correcto |
+| Resolver jornada | ✅ Correcto |
+| Ver resultados y ranking | ✅ Correcto |
+| Historial por grupo | ✅ Correcto |
+| Subir foto de perfil | ✅ Persistente en MongoDB |
+| Avatar en toda la app | ✅ Correcto |
+| Panel admin | ✅ Correcto |
+| Despliegue Vercel + Render | ✅ Operativo |
 
-### 8.2 Proves de usabilitat
+### 8.2 Pruebas de usabilidad
 
-Les proves d'usabilitat s'han fet amb usuaris reals (companys de classe) que han avaluat:
+Las pruebas de usabilidad se han hecho con usuarios reales (compañeros de clase) que han evaluado:
 
-- **Flux de registre i primer accés:** Els usuaris han pogut registrar-se i unir-se a un grup en menys de 2 minuts sense instruccions.
-- **Fer prediccions:** La interfície de botons 1/X/2 i els camps numèrics per al mode exacte es consideren intuïtius.
-- **Feedback visual:** Els botons es marquen en verd quan es guarda la predicció i les targes mostren borde verd quan estan completes.
-- **Navegació:** La Navbar amb accés directe a totes les seccions es valora positivament.
+- **Flujo de registro y primer acceso:** Los usuarios han podido registrarse y unirse a un grupo en menos de 2 minutos sin instrucciones.
+- **Hacer predicciones:** La interfaz de botones 1/X/2 y los campos numéricos para el modo exacto se consideran intuitivos.
+- **Feedback visual:** Los botones se marcan en verde cuando se guarda la predicción y las tarjetas muestran borde verde cuando están completas.
+- **Navegación:** La Navbar con acceso directo a todas las secciones se valora positivamente.
 
-**Millores implementades arran de les proves:**
-- Afegit missatge "✓ Predicció guardada automàticament" per confirmar el guardament.
-- Afegit resum de X/Y partits predits al final de la llista.
-- Selector de grup a Historial per filtrar per competició.
-- Selector de jornades adaptat a cada lliga (38 LaLiga, 3 Mundial, etc.).
+**Mejoras implementadas tras las pruebas:**
+- Añadido mensaje "✓ Predicción guardada automáticamente" para confirmar el guardado.
+- Añadido resumen de X/Y partidos predichos al final de la lista.
+- Selector de grupo en Historial para filtrar por competición.
+- Selector de jornadas adaptado a cada liga (38 LaLiga, 3 Mundial, etc.).
 
-### 8.3 Verificació d'accessibilitat nivell A (WCAG 2.1)
+### 8.3 Verificación de accesibilidad nivel A (WCAG 2.1)
 
-S'han verificat els criteris d'accessibilitat de nivell A més rellevants:
+Se han verificado los criterios de accesibilidad de nivel A más relevantes:
 
-| Criteri WCAG 2.1 | Nivell | Estat |
+| Criterio WCAG 2.1 | Nivel | Estado |
 |---|---|---|
-| 1.1.1 Contingut no textual (alt en imatges) | A | ✅ Totes les imatges (escuts, banderes) tenen atribut `alt` |
-| 1.3.1 Informació i relacions (etiquetes de formulari) | A | ✅ Inputs amb `label` associat |
-| 1.4.3 Contrast (text sobre fons) | AA | ✅ Zinc-950 + blanc/emerald ofereix contrast >4.5:1 |
-| 2.1.1 Teclat (navegació sense ratolí) | A | ✅ Tots els botons i inputs accessibles per teclat |
-| 2.4.1 Ometre blocs (skip link) | A | ⚠️ No implementat (millora futura) |
-| 3.1.1 Idioma de la pàgina | A | ✅ `lang="es"` al tag `<html>` |
-| 3.3.1 Identificació d'errors | A | ✅ Missatges d'error textuals als formularis |
-| 4.1.1 Anàlisi (HTML vàlid) | A | ✅ Next.js genera HTML semàntic correcte |
-| 4.1.2 Nom, rol, valor | A | ✅ Botons amb text descriptiu, inputs amb `type` correcte |
+| 1.1.1 Contenido no textual (alt en imágenes) | A | ✅ Todas las imágenes (escudos, banderas) tienen atributo `alt` |
+| 1.3.1 Información y relaciones (etiquetas de formulario) | A | ✅ Inputs con `label` asociado |
+| 1.4.3 Contraste (texto sobre fondo) | AA | ✅ Zinc-950 + blanco/emerald ofrece contraste >4.5:1 |
+| 2.1.1 Teclado (navegación sin ratón) | A | ✅ Todos los botones e inputs accesibles por teclado |
+| 2.4.1 Omitir bloques (skip link) | A | ⚠️ No implementado (mejora futura) |
+| 3.1.1 Idioma de la página | A | ✅ `lang="es"` en el tag `<html>` |
+| 3.3.1 Identificación de errores | A | ✅ Mensajes de error textuales en los formularios |
+| 4.1.1 Análisis (HTML válido) | A | ✅ Next.js genera HTML semántico correcto |
+| 4.1.2 Nombre, rol, valor | A | ✅ Botones con texto descriptivo, inputs con `type` correcto |
 
-**Eines usades per verificar l'accessibilitat:**
-- Lighthouse (Chrome DevTools) — Puntuació d'accessibilitat: **89/100**.
-- Contrast checker manual per als colors principals del disseny.
+**Herramientas usadas para verificar la accesibilidad:**
+- Lighthouse (Chrome DevTools) — Puntuación de accesibilidad: **89/100**.
+- Contrast checker manual para los colores principales del diseño.
 
-### 8.4 Verificació de desplegament
+### 8.4 Verificación de despliegue
 
-| Entorn | URL | Estat |
+| Entorno | URL | Estado |
 |---|---|---|
-| Frontend (Vercel) | https://frontend-rivalpick.vercel.app | ✅ Operatiu |
-| Backend (Render) | https://backend-rivalpick.onrender.com | ✅ Operatiu |
-| Base de dades (MongoDB Atlas) | Cluster0 | ✅ Operatiu |
+| Frontend (Vercel) | https://frontend-rivalpick.vercel.app | ✅ Operativo |
+| Backend (Render) | https://backend-rivalpick.onrender.com | ✅ Operativo |
+| Base de datos (MongoDB Atlas) | Cluster0 | ✅ Operativo |
 
 ---
 
-## Annexos
+## Anexos
 
-### Usuaris de prova
+### Usuarios de prueba
 
-| Email | Contrasenya | Rol |
+| Email | Contraseña | Rol |
 |---|---|---|
 | ivangarciac10@gmail.com | Ivancete@1803 | superadmin |
-| joel@gmail.com | Joel123 | usuari |
-| oscar@gmail.com | oscar123 | usuari |
+| joel@gmail.com | Joel123 | usuario |
+| oscar@gmail.com | oscar123 | usuario |
 
-### Grups de prova
+### Grupos de prueba
 
-| Nom | Lliga | Mode | Codi |
+| Nombre | Liga | Modo | Código |
 |---|---|---|---|
-| Peña Barcelonista | LaLiga | Clàssic | RHZPEJ |
-| El mundialito de los jugones | Mundial | Clàssic | PNQTUW |
-| Porra Mundial Exacto | Mundial | Exacte | J7R8TM |
+| Peña Barcelonista | LaLiga | Clásico | RHZPEJ |
+| El mundialito de los jugones | Mundial | Clásico | PNQTUW |
+| Porra Mundial Exacto | Mundial | Exacto | J7R8TM |
 
-### Repositoris
+### Repositorios
 
 - **Frontend:** https://github.com/ivaaan22/frontend-rivalpick
 - **Backend:** https://github.com/ivaaan22/Backend-Rivalpick
