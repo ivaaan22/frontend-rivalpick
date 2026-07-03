@@ -17,6 +17,8 @@ export default function DetalleGrupoPage() {
   const [cargando, setCargando] = useState(true)
   const [mensaje, setMensaje] = useState('')
   const [editando, setEditando] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [confirmarEliminar, setConfirmarEliminar] = useState(false)
   const [nombre, setNombre] = useState('')
   const [descripcion, setDescripcion] = useState('')
   const [apuesta, setApuesta] = useState('')
@@ -53,7 +55,6 @@ export default function DetalleGrupoPage() {
   }
 
   const handleEliminar = async () => {
-    if (!confirm('¿Seguro que quieres eliminar este grupo?')) return
     try {
       await apiRequest(`/grupos/${params.id}`, { method: 'DELETE' })
       router.push('/grupos')
@@ -124,7 +125,27 @@ export default function DetalleGrupoPage() {
                   <div className="bg-zinc-800 rounded-xl p-3"><p className="text-xs text-zinc-500">Liga</p><p className="text-sm font-medium text-white mt-0.5">{grupo?.liga}</p></div>
                   <div className="bg-zinc-800 rounded-xl p-3"><p className="text-xs text-zinc-500">Modo</p><p className="text-sm font-medium text-white mt-0.5">{grupo?.modo === '1X2' ? 'Clásico (1X2)' : 'Marcador exacto'}</p></div>
                   <div className="bg-zinc-800 rounded-xl p-3"><p className="text-xs text-zinc-500">Visibilidad</p><p className="text-sm font-medium text-white mt-0.5 capitalize">{grupo?.visibilidad}</p></div>
-                  <div className="bg-zinc-800 rounded-xl p-3"><p className="text-xs text-zinc-500">Código</p><p className="text-sm font-medium text-white mt-0.5 tracking-widest">{grupo?.codigoInvitacion}</p></div>
+                  <div className="bg-zinc-800 rounded-xl p-3 relative">
+                    <p className="text-xs text-zinc-500">Código</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-white mt-0.5 tracking-widest">{grupo?.codigoInvitacion}</p>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(grupo?.codigoInvitacion)
+                          setCopied(true)
+                          setTimeout(() => setCopied(false), 2000)
+                        }}
+                        className="text-zinc-400 hover:text-emerald-400 transition"
+                        title="Copiar código"
+                      >
+                        {copied ? (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        ) : (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 {grupo?.apuesta && (
@@ -142,7 +163,7 @@ export default function DetalleGrupoPage() {
                 {rolUsuario === 'admin' && (
                   <div className="flex gap-2 mt-3 pt-4 border-t border-zinc-800">
                     <button onClick={() => setEditando(true)} className="px-4 py-2 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 text-sm transition">Editar</button>
-                    <button onClick={handleEliminar} className="px-4 py-2 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm transition">Eliminar grupo</button>
+                    <button onClick={() => setConfirmarEliminar(true)} className="px-4 py-2 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm transition">Eliminar grupo</button>
                   </div>
                 )}
               </div>
@@ -170,6 +191,25 @@ export default function DetalleGrupoPage() {
           )}
         </div>
       </div>
+
+      {/* Modal confirmar eliminar */}
+      {confirmarEliminar && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <div className="text-center mb-5">
+              <div className="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-3">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              </div>
+              <h3 className="text-white font-semibold text-lg">Eliminar grupo</h3>
+              <p className="text-zinc-400 text-sm mt-2">¿Seguro que quieres eliminar <span className="text-white font-medium">{grupo?.nombre}</span>? Esta acción no se puede deshacer.</p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setConfirmarEliminar(false)} className="flex-1 py-2.5 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white transition text-sm">Cancelar</button>
+              <button onClick={() => { setConfirmarEliminar(false); handleEliminar() }} className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-400 text-white font-semibold transition text-sm">Sí, eliminar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </ProtectedRoute>
   )
 }

@@ -164,6 +164,16 @@ function PrediccionesContent() {
 
   const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
+  const cuentaAtras = (fecha) => {
+    const diff = new Date(fecha) - new Date()
+    if (diff <= 0) return null
+    const horas = Math.floor(diff / 1000 / 60 / 60)
+    const minutos = Math.floor((diff / 1000 / 60) % 60)
+    if (horas > 48) return null
+    if (horas >= 1) return `Cierra en ${horas}h ${minutos}m`
+    return `⚠️ Cierra en ${minutos} min`
+  }
+
   const totalPredichos = Object.keys(misPredicciones).filter(id => misPredicciones[id]?.prediccion).length
   const totalPendientes = partidos.filter(p => p.estado === 'TIMED' || p.estado === 'SCHEDULED').length
   const todoPredicho = totalPendientes > 0 && totalPredichos === totalPendientes
@@ -217,10 +227,16 @@ function PrediccionesContent() {
                     const bloqueado = partido.estado !== 'TIMED' && partido.estado !== 'SCHEDULED'
                     return (
                       <div key={partido.partidoId} className={`bg-zinc-900 border rounded-2xl p-5 transition ${miPred?.prediccion ? 'border-emerald-500/30' : 'border-zinc-800'}`}>
-                        <p className="text-xs text-zinc-500 mb-4">{formatearFecha(partido.fecha)}</p>
+                        <div className="flex items-center justify-between mb-4">
+                          <p className="text-xs text-zinc-500">{formatearFecha(partido.fecha)}</p>
+                          {!bloqueado && cuentaAtras(partido.fecha) && (
+                            <span className="text-xs text-amber-400 font-medium">{cuentaAtras(partido.fecha)}</span>
+                          )}
+                        </div>
                         <div className="grid grid-cols-3 items-center gap-3 mb-5">
                           <div className="text-center">
-                            <img src={partido.escudoLocal} alt={partido.equipoLocal} className="w-10 h-10 object-contain mx-auto mb-1" />
+                            <img src={partido.escudoLocal} alt={partido.equipoLocal} className="w-10 h-10 object-contain mx-auto mb-1" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                            <div className="w-10 h-10 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden mx-auto mb-1">{partido.equipoLocal?.[0]}</div>
                             <p className="text-white text-xs">{partido.equipoLocal}</p>
                           </div>
                           <div className="text-center">
@@ -230,7 +246,8 @@ function PrediccionesContent() {
                             }
                           </div>
                           <div className="text-center">
-                            <img src={partido.escudoVisitante} alt={partido.equipoVisitante} className="w-10 h-10 object-contain mx-auto mb-1" />
+                            <img src={partido.escudoVisitante} alt={partido.equipoVisitante} className="w-10 h-10 object-contain mx-auto mb-1" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                            <div className="w-10 h-10 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden mx-auto mb-1">{partido.equipoVisitante?.[0]}</div>
                             <p className="text-white text-xs">{partido.equipoVisitante}</p>
                           </div>
                         </div>

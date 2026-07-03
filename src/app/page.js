@@ -74,7 +74,7 @@ export default function Home() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-white font-semibold">Mis grupos</h2>
                 <div className="flex gap-2">
-                  <button onClick={() => router.push('/grupos/unirse')} className="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition">Unirme</button>
+                  <button onClick={() => router.push('/grupos/unirse')} className="text-xs px-3 py-1.5 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-medium transition">Unirme</button>
                   <button onClick={() => router.push('/grupos/nuevo')} className="text-xs px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold transition">+ Nuevo</button>
                 </div>
               </div>

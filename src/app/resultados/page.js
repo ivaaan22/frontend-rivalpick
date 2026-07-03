@@ -171,7 +171,8 @@ function ResultadosContent() {
                       <p className="text-xs text-zinc-500 mb-3">{formatearFecha(partido.fecha)}</p>
                       <div className="grid grid-cols-3 items-center gap-3 mb-4">
                         <div className="flex flex-col items-center gap-1">
-                          <img src={partido.escudoLocal} alt={partido.equipoLocal} className="w-8 h-8 object-contain" />
+                          <img src={partido.escudoLocal} alt={partido.equipoLocal} className="w-8 h-8 object-contain" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                          <div className="w-8 h-8 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden">{partido.equipoLocal?.[0]}</div>
                           <p className="text-white text-xs font-medium text-center">{partido.equipoLocal}</p>
                         </div>
                         <div className="text-center">
@@ -181,14 +182,21 @@ function ResultadosContent() {
                           }
                         </div>
                         <div className="flex flex-col items-center gap-1">
-                          <img src={partido.escudoVisitante} alt={partido.equipoVisitante} className="w-8 h-8 object-contain" />
+                          <img src={partido.escudoVisitante} alt={partido.equipoVisitante} className="w-8 h-8 object-contain" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                          <div className="w-8 h-8 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden">{partido.equipoVisitante?.[0]}</div>
                           <p className="text-white text-xs font-medium text-center">{partido.equipoVisitante}</p>
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {partido.picks?.map((pick) => (
-                          <div key={pick.userId} className={`px-2 py-1 rounded-lg text-xs border ${pick.acerto ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : pick.prediccion ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-zinc-800 text-zinc-500 border-zinc-700'}`}>
-                            {pick.nombre.split(' ')[0]} · {pick.prediccion || '—'}
+                          <div key={pick.userId} className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs border font-medium ${
+                            pick.acerto ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
+                            : pick.prediccion ? 'bg-red-500/20 text-red-400 border-red-500/30' 
+                            : 'bg-zinc-800 text-zinc-500 border-zinc-700'
+                          }`}>
+                            <span>{pick.acerto ? '✅' : pick.prediccion ? '❌' : '—'}</span>
+                            <span>{pick.nombre.split(' ')[0]}</span>
+                            <span className="opacity-70">{pick.prediccion || '—'}</span>
                           </div>
                         ))}
                       </div>
@@ -204,7 +212,10 @@ function ResultadosContent() {
                         <div key={u.userId} className="flex items-center gap-2">
                           <span className="text-zinc-500 text-sm w-5">{i + 1}</span>
                           <Avatar usuario={u} size="xs" />
-                          <p className="text-white text-sm flex-1 truncate">{u.nombre}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white text-sm truncate">{u.nombre}</p>
+                            {u.equipoFavorito && <p className="text-zinc-600 text-xs truncate">{u.equipoFavorito}</p>}
+                          </div>
                           <span className="text-emerald-400 font-semibold text-sm">{u.puntos}</span>
                         </div>
                       ))}
