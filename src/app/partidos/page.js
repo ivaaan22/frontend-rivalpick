@@ -210,7 +210,11 @@ export default function PartidosPage() {
                           </div>
                           <div className="grid grid-cols-3 items-center gap-2">
                             <div className="flex items-center gap-2 justify-end">
-                              <span className="text-sm font-medium text-white text-right">{p.equipoLocal}</span>
+                              {p.equipoLocal === 'FC Barcelona' ? (
+                                <button onClick={() => router.push('/equipos/fc-barcelona')} className="text-sm font-medium text-white text-right hover:text-emerald-400 transition">{p.equipoLocal}</button>
+                              ) : (
+                                <span className="text-sm font-medium text-white text-right">{p.equipoLocal}</span>
+                              )}
                               <img src={p.escudoLocal} alt={p.equipoLocal} className="w-7 h-7 object-contain" />
                             </div>
                             <div className="text-center">
@@ -218,7 +222,11 @@ export default function PartidosPage() {
                             </div>
                             <div className="flex items-center gap-2">
                               <img src={p.escudoVisitante} alt={p.equipoVisitante} className="w-7 h-7 object-contain" />
-                              <span className="text-sm font-medium text-white">{p.equipoVisitante}</span>
+                              {p.equipoVisitante === 'FC Barcelona' ? (
+                                <button onClick={() => router.push('/equipos/fc-barcelona')} className="text-sm font-medium text-white hover:text-emerald-400 transition">{p.equipoVisitante}</button>
+                              ) : (
+                                <span className="text-sm font-medium text-white">{p.equipoVisitante}</span>
+                              )}
                             </div>
                           </div>
                         </div>
