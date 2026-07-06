@@ -169,24 +169,32 @@ function ResultadosContent() {
                   ) : datos.resultados?.map((partido) => (
                     <div key={partido.partidoId} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
                       <p className="text-xs text-zinc-500 mb-3">{formatearFecha(partido.fecha)}</p>
-                      <div className="grid grid-cols-3 items-center gap-3 mb-4">
-                        <div className="flex flex-col items-center gap-1">
-                          <img src={partido.escudoLocal} alt={partido.equipoLocal} className="w-8 h-8 object-contain" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
-                          <div className="w-8 h-8 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden">{partido.equipoLocal?.[0]}</div>
-                          <p className="text-white text-xs font-medium text-center">{partido.equipoLocal}</p>
+                        <div className="grid grid-cols-3 items-center gap-3 mb-4">
+                          <div className="flex flex-col items-center gap-1">
+                            <img src={partido.escudoLocal} alt={partido.equipoLocal} className="w-8 h-8 object-contain" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                            <div className="w-8 h-8 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden">{partido.equipoLocal?.[0]}</div>
+                            {partido.equipoLocal === 'FC Barcelona' ? (
+                              <button onClick={() => router.push('/equipos/fc-barcelona')} className="text-white text-xs font-medium text-center hover:text-emerald-400 transition">{partido.equipoLocal}</button>
+                            ) : (
+                              <p className="text-white text-xs font-medium text-center">{partido.equipoLocal}</p>
+                            )}
+                          </div>
+                          <div className="text-center">
+                            {partido.estado === 'FINISHED'
+                              ? <p className="text-white text-lg font-bold">{partido.golesLocal} - {partido.golesVisitante}</p>
+                              : <p className="text-zinc-500 text-sm">Pendiente</p>
+                            }
+                          </div>
+                          <div className="flex flex-col items-center gap-1">
+                            <img src={partido.escudoVisitante} alt={partido.equipoVisitante} className="w-8 h-8 object-contain" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                            <div className="w-8 h-8 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden">{partido.equipoVisitante?.[0]}</div>
+                            {partido.equipoVisitante === 'FC Barcelona' ? (
+                              <button onClick={() => router.push('/equipos/fc-barcelona')} className="text-white text-xs font-medium text-center hover:text-emerald-400 transition">{partido.equipoVisitante}</button>
+                            ) : (
+                              <p className="text-white text-xs font-medium text-center">{partido.equipoVisitante}</p>
+                            )}
+                          </div>
                         </div>
-                        <div className="text-center">
-                          {partido.estado === 'FINISHED'
-                            ? <p className="text-white text-lg font-bold">{partido.golesLocal} - {partido.golesVisitante}</p>
-                            : <p className="text-zinc-500 text-sm">Pendiente</p>
-                          }
-                        </div>
-                        <div className="flex flex-col items-center gap-1">
-                          <img src={partido.escudoVisitante} alt={partido.equipoVisitante} className="w-8 h-8 object-contain" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
-                          <div className="w-8 h-8 rounded-full bg-zinc-700 items-center justify-center text-xs text-zinc-400 font-bold hidden">{partido.equipoVisitante?.[0]}</div>
-                          <p className="text-white text-xs font-medium text-center">{partido.equipoVisitante}</p>
-                        </div>
-                      </div>
                       <div className="flex flex-wrap gap-2">
                         {partido.picks?.map((pick) => (
                           <div key={pick.userId} className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs border font-medium ${
