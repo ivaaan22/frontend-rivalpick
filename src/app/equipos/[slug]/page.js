@@ -8,7 +8,7 @@ import Loading from '../../components/Loading'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
 
-const POSICION_ORDEN = { Portero: 0, Defensa: 1, Centrocampista: 2, Delantero: 3 }
+const POSICION_ORDEN = { Entrenador: -1, Portero: 0, Defensa: 1, Centrocampista: 2, Delantero: 3 }
 const POSICION_COLOR = {
   Portero: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
   Defensa: 'bg-sky-500/20 text-sky-400 border-sky-500/30',
@@ -79,7 +79,9 @@ export default function EquipoPage() {
     </ProtectedRoute>
   )
 
+  const entrenador = equipo.jugadores.find(j => j.posicion === 'Entrenador')
   const jugadoresFiltrados = equipo.jugadores
+    .filter(j => j.posicion !== 'Entrenador')
     .filter(j => filtro === 'Todos' || j.posicion === filtro)
     .sort((a, b) => {
       if (orden === 'posicion') return POSICION_ORDEN[a.posicion] - POSICION_ORDEN[b.posicion] || (a.dorsal || 99) - (b.dorsal || 99)
@@ -138,6 +140,36 @@ export default function EquipoPage() {
               </div>
             </div>
           </div>
+
+          {/* Entrenador */}
+          {entrenador && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden mb-6">
+              <div className="px-4 py-2 border-b border-zinc-800 bg-zinc-800/30">
+                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Entrenador</span>
+              </div>
+              <div className="flex items-center gap-4 p-4">
+                <div className="w-20 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-zinc-800">
+                  <FotoJugador foto={entrenador.foto} nombre={entrenador.nombre} />
+                </div>
+                <div>
+                  <p className="text-white text-lg font-bold">{entrenador.nombre}</p>
+                  <p className="text-zinc-400 text-sm">{entrenador.nacionalidad} · {entrenador.edad} años</p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <div className="text-center">
+                      <p className="text-emerald-400 font-bold text-lg">{entrenador.partidos}</p>
+                      <p className="text-zinc-500 text-xs">Partidos</p>
+                    </div>
+                    {entrenador.amarillas > 0 && (
+                      <div className="text-center">
+                        <p className="text-amber-400 font-bold text-lg">{entrenador.amarillas}</p>
+                        <p className="text-zinc-500 text-xs">🟨</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Filtros */}
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
