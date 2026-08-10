@@ -19,7 +19,7 @@ export default function NuevoGrupoPage() {
 
   const ligas = [
     { id: 'LaLiga', nombre: 'LaLiga', pais: 'España' },
-    { id: 'Premier', nombre: 'Premier', pais: 'Inglaterra' },
+    { id: 'Premier', nombre: 'Premier League', pais: 'Inglaterra' },
     { id: 'Bundesliga', nombre: 'Bundesliga', pais: 'Alemania' },
     { id: 'SerieA', nombre: 'Serie A', pais: 'Italia' },
     { id: 'Ligue1', nombre: 'Ligue 1', pais: 'Francia' },
